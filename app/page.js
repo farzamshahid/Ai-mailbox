@@ -13,9 +13,9 @@ export default function Home() {
   const [chats, setChats] = useState([])
   const handleSubmit = (e) => {
     e.preventDefault()
-    let chat1 = chat.trim()
-    if (chat1 != '') {
-      const updatedchat = [...chats, chat1]
+    if (chat != '') {
+
+      const updatedchat = [...chats, chat]
       setChats(updatedchat)
       localStorage.setItem('chat', updatedchat);
       setIframe(chat)
@@ -28,28 +28,21 @@ export default function Home() {
       alert("please Fill field")
       setEmail('')
     }
-    else if (email.endsWith("ABC")) {
+    else if (email.startsWith("ABC")) {
       alert("please write email of correct format")
       setEmail('')
 
     }
     else if (email.includes("@gmail.com") || email.includes("@yahoo.com")) {
+      localStorage.setItem('email', email)
       setEmails(email)
-      localStorage.setItem('email', emails)
       setEframe(email)
       setEmail('')
     }
   }
 
-  useEffect(() => {
-    const emailValue = localStorage.getItem('email')
-    if (emailValue) {
-      setEmails(emailValue)
-    }
-  }, [email])
 
   useEffect(() => {
-
     let chatValue = localStorage.getItem('chat') || [];
     setChats(chatValue)
   }, [])
