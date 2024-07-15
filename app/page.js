@@ -1,95 +1,119 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client"
+import { Flex, Box, Heading, Divider, Button } from "@chakra-ui/react";
+import { Input, Text } from '@chakra-ui/react'
+import { useEffect, useState } from "react";
 
+import { Sidebar } from "@/components/sidebar";
 export default function Home() {
+  const [email, setEmail] = useState('')
+  const [chat, setChat] = useState('')
+  const [iframe, setIframe] = useState('')
+  const [eframe, setEframe] = useState('')
+  const [emails, setEmails] = useState('')
+  const [chats, setChats] = useState([])
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    let chat1 = chat.trim()
+    if (chat1 != '') {
+      const updatedchat = [...chats, chat1]
+      setChats(updatedchat)
+      localStorage.setItem('chat', updatedchat);
+      setIframe(chat)
+      setChat('')
+    }
+  }
+  const handleEmail = (e) => {
+    e.preventDefault()
+    if (email === "") {
+      alert("please Fill field")
+      setEmail('')
+    }
+    else if (email.endsWith("ABC")) {
+      alert("please write email of correct format")
+      setEmail('')
+
+    }
+    else if (email.includes("@gmail.com") || email.includes("@yahoo.com")) {
+      setEmails(email)
+      localStorage.setItem('email', emails)
+      setEframe(email)
+      setEmail('')
+    }
+  }
+
+  useEffect(() => {
+    const emailValue = localStorage.getItem('email')
+    if (emailValue) {
+      setEmails(emailValue)
+    }
+  }, [email])
+
+  useEffect(() => {
+
+    let chatValue = localStorage.getItem('chat') || [];
+    setChats(chatValue)
+  }, [])
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <Box fontFamily="sans-serif">
+      <Flex flexDir="row" borderColor="brand.400" borderWidth="2px">
+        <Sidebar />
+        <Divider orientation='vertical' h="99vh" borderWidth="2px" borderColor="brand.400" />
+        <Flex flexDir="column" w="50%" h="99vh" bgColor="brand.100" border="brand.500" >
+          <Flex>
+            <Text mr="10px" ml="4px" fontSize='20px' mt="16px" fontWeight="bold" color="brand.400">
+              Email
+            </Text>
+            <Input mt="10px" mr="8px" borderColor="brand.400" value={email} w="300px" placeholder="Enter your email" color="brand.400" onChange={(e) => setEmail(e.target.value)} />
+            <Button bgColor="brand.200" color="brand.500" mb="20px" mt="10px" _hover={{ backgroundColor: "brand.200" }} mr="2px" w='90px' onClick={handleEmail} >Send</Button>
+          </Flex>
+          <Divider borderWidth="2px" borderColor="brand.400" />
+          <Flex flexDir="column">
+            <Text fontWeight="bold" ml="4px" fontSize="25px">
+              {chats}
+            </Text>
+          </Flex>
+          <Flex pos="static" mt="513px">
+            <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
+              <Text mr="16px" ml="5px" fontSize='20px' fontWeight="bold" color="brand.400">
+                Chat
+              </Text>
+              <Input mr="9px" borderColor="brand.400" value={chat} w="300px" placeholder="Type something to chat" color="brand.400" onChange={(e) => setChat(e.target.value)} />
+              <Button color="brand.500" bgColor="brand.200" _hover={{ backgroundColor: "brand.200" }} mr="2px" onClick={handleSubmit} >Submit</Button>
+            </Flex>
+          </Flex>
+        </Flex>
+        <Divider orientation='vertical' h="99vh" borderColor="brand.400" />
+        <Flex flexDir="column" w="50%" h="99vh" borderWidth="2px" bgColor="brand.100">
+          <Flex flexDir="column">
+            <Box>
+              {emails}
+            </Box>
+            {
+              eframe &&
+              <>
+                <Flex flexDir="column">
+                  <Heading color="brand.400">
+                    Output
+                  </Heading>
+                  <iframe srcDoc={eframe} width="100%" height="300px" ></iframe>
+                </Flex>
+              </>
+            }
+          </Flex>
+          {
+            iframe &&
+            <Flex flexDir="column">
+              <Heading color="brand.400" >
+                Output
+              </Heading>
+              <Box>
+                <iframe srcDoc={iframe} width="50%" height="200px" ></iframe>
+              </Box>
+            </Flex>
+          }
+        </Flex>
+      </Flex >
+    </Box >
   );
 }
