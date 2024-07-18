@@ -20,7 +20,7 @@ export const Sidebar = () => {
                             <Text ml="7px" mt="12px" mr="10px" fontSize="15px" fontWeight="bold" color="brand.400" _hover={{ cursor: 'pointer' }} onClick={() => router.push('/')} >AI Mailbox</Text>
                         </Flex>
                         <Divider borderWidth="2px" w="105%" borderColor="brand.400" />
-                        <Flex alignItems='center' mt="570px">
+                        <Flex alignItems='center' mt="555px">
                             <CiSettings color="brand.400" mt="2px" fontSize="35px" />
                             <Text mt="1px" fontSize="15px" ml="7px" mr="10px" fontWeight="bold" color="brand.400" _hover={{ cursor: 'pointer' }} onClick={() => router.push('/settings')}>
                                 Settings
