@@ -76,7 +76,7 @@ export default function Home() {
             </Flex>
           </Flex>
         </Flex>
-        <Divider orientation='vertical' h="99vh" borderColor="brand.400" />
+        <Divider orientation='vertical' h="99vh" borderWidth="2px" borderColor="brand.400" />
         <Flex flexDir="column" w="50%" h="99vh" borderWidth="2px" bgColor="brand.100">
           <Flex flexDir="column">
             <Box>
