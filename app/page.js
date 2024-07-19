@@ -1,112 +1,186 @@
-"use client"
+"use client";
 import { Flex, Box, Heading, Divider, Button } from "@chakra-ui/react";
-import { Input, Text } from '@chakra-ui/react'
+import { Input, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-
 import { Sidebar } from "@/components/sidebar";
+
 export default function Home() {
-  const [email, setEmail] = useState('')
-  const [chat, setChat] = useState('')
-  const [iframe, setIframe] = useState('')
-  const [eframe, setEframe] = useState('')
-  const [emails, setEmails] = useState('')
-  const [chats, setChats] = useState([])
+  const [email, setEmail] = useState("");
+  const [chat, setChat] = useState("");
+  const [iframe, setIframe] = useState("");
+  const [eframe, setEframe] = useState("");
+  const [emails, setEmails] = useState("");
+  const [chats, setChats] = useState([]);
+
   const handleSubmit = (e) => {
-    e.preventDefault()
-    if (chat != '') {
-
-      const updatedchat = [...chats, chat]
-      setChats(updatedchat)
-      localStorage.setItem('chat', updatedchat);
-      setIframe(chat)
-      setChat('')
+    e.preventDefault();
+    if (chat != "") {
+      const updatedchat = [...chats, chat];
+      setChats(updatedchat);
+      localStorage.setItem("chat", JSON.stringify(updatedchat));
+      setIframe(chat);
+      setChat("");
     }
-  }
+  };
+
   const handleEmail = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     if (email === "") {
-      alert("please Fill field")
-      setEmail('')
-    }
-    else if (email.startsWith("ABC")) {
-      alert("please write email of correct format")
-      setEmail('')
-
+      alert("please Fill field");
+      setEmail("");
     }
     else if (email.includes("@gmail.com") || email.includes("@yahoo.com")) {
-      localStorage.setItem('email', email)
-      setEmails(email)
-      setEframe(email)
-      setEmail('')
+      localStorage.setItem("email", email);
+      setEmails(email);
+      setEframe(email);
+      setEmail("");
     }
-  }
+    else {
+      alert('email format is incorrect')
+      setEmail("");
 
+    }
+  };
 
   useEffect(() => {
-    let chatValue = localStorage.getItem('chat') || [];
-    setChats(chatValue)
-  }, [])
+    let chatValue = localStorage.getItem("chat");
+    if (chatValue) {
+      try {
+        setChats(JSON.parse(chatValue));
+      } catch {
+        setChats([]);
+      }
+    } else {
+      setChats([]);
+    }
+  }, []);
 
   return (
     <Box fontFamily="sans-serif">
       <Flex flexDir="row" borderColor="brand.400" borderWidth="2px">
         <Sidebar />
-        <Divider orientation='vertical' h="99vh" borderWidth="2px" borderColor="brand.400" />
-        <Flex flexDir="column" w="50%" h="99vh" bgColor="brand.100" border="brand.500" >
+        <Divider
+          orientation="vertical"
+          h="99vh"
+          borderWidth="2px"
+          borderColor="brand.400"
+        />
+        <Flex
+          flexDir="column"
+          w={{ md: '45%', lg: '50%' }}
+          h="99vh"
+          bgColor="brand.100"
+          border="brand.500"
+        >
           <Flex>
-            <Text mr="10px" ml="4px" fontSize='20px' mt="16px" fontWeight="bold" color="brand.400">
+            <Text
+              mr="10px"
+              ml="4px"
+              fontSize="20px"
+              mt="16px"
+              fontWeight="bold"
+              color="brand.400"
+            >
               Email
             </Text>
-            <Input mt="10px" mr="8px" borderColor="brand.400" value={email} w="300px" placeholder="Enter your email" color="brand.400" onChange={(e) => setEmail(e.target.value)} />
-            <Button bgColor="brand.200" color="brand.500" mb="20px" mt="10px" _hover={{ backgroundColor: "brand.200" }} mr="2px" w='90px' onClick={handleEmail} >Send</Button>
+            <Input
+              mt="10px"
+              mr="8px"
+              borderColor="brand.400"
+              value={email}
+              w="300px"
+              placeholder="Enter your email"
+              color="brand.400"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Button
+              bgColor="brand.200"
+              color="brand.500"
+              mb="20px"
+              mt="10px"
+              _hover={{ backgroundColor: "brand.200" }}
+              mr="2px"
+              w="90px"
+              onClick={handleEmail}
+            >
+              Send
+            </Button>
           </Flex>
           <Divider borderWidth="2px" borderColor="brand.400" />
           <Flex flexDir="column">
-            <Text fontWeight="bold" ml="4px" fontSize="25px">
-              {chats}
-            </Text>
+            {chats.map((chatMessage, index) => (
+              <Text key={index} fontWeight="bold" ml="4px" fontSize="25px">
+                {chatMessage}
+              </Text>
+            ))}
           </Flex>
-          <Flex pos="static" mt="513px">
+          <Flex mt="auto">
             <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
-              <Text mr="16px" ml="5px" fontSize='20px' fontWeight="bold" color="brand.400">
+              <Text
+                mr={{ md: "6px", lg: "16px" }}
+                ml={{ md: "1px", lg: "5px" }}
+                fontSize="20px"
+                color="brand.400"
+                fontWeight="bold"
+              >
                 Chat
               </Text>
-              <Input mr="9px" borderColor="brand.400" value={chat} w="300px" placeholder="Type something to chat" color="brand.400" onChange={(e) => setChat(e.target.value)} />
-              <Button color="brand.500" bgColor="brand.200" _hover={{ backgroundColor: "brand.200" }} mr="2px" onClick={handleSubmit} >Submit</Button>
+              <Input
+                mr={{ md: "5px", lg: "9px" }}
+                borderColor="brand.400"
+                value={chat}
+                w={{ md: '215px', lg: '300px' }}
+                placeholder="Type something to chat"
+                color="brand.400"
+                onChange={(e) => setChat(e.target.value)}
+              />
+              <Button
+                color="brand.500"
+                bgColor="brand.200"
+                _hover={{ backgroundColor: "brand.200" }}
+                mr="2px"
+                w={{ md: "70px", lg: "20%" }}
+                onClick={handleSubmit}
+              >
+                Submit
+              </Button>
             </Flex>
           </Flex>
         </Flex>
-        <Divider orientation='vertical' h="99vh" borderWidth="2px" borderColor="brand.400" />
-        <Flex flexDir="column" w="50%" h="99vh" borderWidth="2px" bgColor="brand.100">
+        <Divider
+          orientation="vertical"
+          h="99vh"
+          borderWidth="2px"
+          borderColor="brand.400"
+        />
+        <Flex
+          flexDir="column"
+          w="50%"
+          h="99vh"
+          borderWidth="2px"
+          bgColor="brand.100"
+        >
           <Flex flexDir="column">
-            <Box>
-              {emails}
-            </Box>
-            {
-              eframe &&
+            <Box>{emails}</Box>
+            {eframe && (
               <>
                 <Flex flexDir="column">
-                  <Heading color="brand.400">
-                    Output
-                  </Heading>
-                  <iframe srcDoc={eframe} width="100%" height="300px" ></iframe>
+                  <Heading color="brand.400">Output</Heading>
+                  <iframe srcDoc={eframe} width="100%" height="300px"></iframe>
                 </Flex>
               </>
-            }
+            )}
           </Flex>
-          {
-            iframe &&
+          {iframe && (
             <Flex flexDir="column">
-              <Heading color="brand.400" >
-                Output
-              </Heading>
+              <Heading color="brand.400">Output</Heading>
               <Box>
-                <iframe srcDoc={iframe} width="50%" height="200px" ></iframe>
+                <iframe srcDoc={iframe} width="50%" height="200px"></iframe>
               </Box>
             </Flex>
-          }
+          )}
         </Flex>
-      </Flex >
-    </Box >
+      </Flex>
+    </Box>
   );
 }

@@ -16,7 +16,7 @@ export default function Settings() {
         <Flex flexDir="row" borderColor="brand.400" borderWidth="2px">
             <Sidebar />
             <Divider orientation='vertical' borderWidth="2px" h="99vh" borderColor="brand.400" />
-            <Flex w="100%" h="97vh" backgroundColor="brand.100">
+            <Flex w="100%" h="99vh" backgroundColor="brand.100">
                 <Tabs>
                     <TabList>
                         <Tab color="brand.400" fontWeight="bold">SMTP</Tab>
@@ -35,11 +35,11 @@ export default function Settings() {
                             </Text >
                             <Text fontWeight="bold" color="brand.400" mt="15px">
                                 UserName
-                                <Input ml="14px" borderColor="brand.400" w="300px" value={userName} onChange={(e) => setUserName(e.target.value)} />
+                                <Input ml="13px" borderColor="brand.400" w="300px" value={userName} onChange={(e) => setUserName(e.target.value)} />
                             </Text>
                             <Text mt="15px" fontWeight="bold" color="brand.400">
                                 Password
-                                <Input w="300px" borderColor="brand.400" type='password' ml="22px" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <Input w="300px" borderColor="brand.400" type='password' ml="17px" value={password} onChange={(e) => setPassword(e.target.value)} />
                             </Text>
                             <Flex>
                                 <Button color="brand.500" _hover={{ backgroundColor: "brand.200" }} backgroundColor="brand.200" mt="30px" mr="30px" onClick={() => { console.log(password, server, port, userName, password, email) }}>test</Button>
