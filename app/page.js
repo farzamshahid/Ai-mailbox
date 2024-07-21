@@ -108,7 +108,7 @@ export default function Home() {
           </Flex>
           <Divider borderWidth="2px" borderColor="brand.400" />
           <Flex flexDir="column">
-            <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "18px", lg: "25px" }} mt="4px" mb={{ md: "5px", lg: "4px" }} ml="4px">
+            <Text fontWeight="bold" alignSelf="flex-start" width="fit-content" fontSize={{ md: "18px", lg: "25px" }} mt="4px" mb={{ md: "5px", lg: "4px" }} ml="4px" backgroundColor="brand.500" borderRadius="20px" padding="8px">
               Hello, how may I assist you?
             </Text>
             {chats.map((chatMessage, index) => (
