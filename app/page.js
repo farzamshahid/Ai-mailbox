@@ -107,9 +107,9 @@ export default function Home() {
             </Button>
           </Flex>
           <Divider borderWidth="2px" borderColor="brand.400" />
-          <Flex flexDir="column">
+          <Flex flexDir="column" >
             {chats.map((chatMessage, index) => (
-              <Text key={index} fontWeight="bold" ml="4px" fontSize="25px">
+              <Text key={index} color="brand.500" width="fit-content" fontWeight="bold" mb="4px" ml="4px" mr="4px" mt="15px" fontSize="25px" backgroundColor="brand.200" borderRadius="20px" padding="8px">
                 {chatMessage}
               </Text>
             ))}
