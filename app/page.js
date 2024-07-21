@@ -88,7 +88,9 @@ export default function Home() {
               mr="8px"
               borderColor="brand.400"
               value={email}
-              w="300px"
+              w={{
+                md: "600px", lg: "800px"
+              }}
               placeholder="Enter your email"
               color="brand.400"
               onChange={(e) => setEmail(e.target.value)}
@@ -100,7 +102,7 @@ export default function Home() {
               mt="10px"
               _hover={{ backgroundColor: "brand.200" }}
               mr="2px"
-              w="90px"
+              w="110px"
               onClick={handleEmail}
             >
               Send
@@ -121,10 +123,12 @@ export default function Home() {
             <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
               <Input
                 ml={{ md: "5px", lg: "7px" }}
-                mr={{ md: "5px", lg: "9px" }}
+                mr={{ md: "5px", lg: "15px" }}
                 borderColor="brand.400"
                 value={chat}
-                w={{ md: '250px', lg: '320px' }}
+                w={{
+                  md: '260px', lg: '750px'
+                }}
                 placeholder="Type something to chat"
                 color="brand.400"
                 onChange={(e) => setChat(e.target.value)}
@@ -134,7 +138,7 @@ export default function Home() {
                 bgColor="brand.200"
                 _hover={{ backgroundColor: "brand.200" }}
                 mr="2px"
-                w={{ md: "70px", lg: "20%" }}
+                w={{ md: "70px", lg: "15%" }}
                 onClick={handleSubmit}
               >
                 Chat
