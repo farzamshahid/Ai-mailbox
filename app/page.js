@@ -107,25 +107,20 @@ export default function Home() {
             </Button>
           </Flex>
           <Divider borderWidth="2px" borderColor="brand.400" />
-          <Flex flexDir="column" >
+          <Flex flexDir="column">
+            <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "22px", lg: "25px" }} mt="4px" mb={{ md: "5px", lg: "4px" }} ml="4px">
+              Hello, how may I assist you?
+            </Text>
             {chats.map((chatMessage, index) => (
-              <Text key={index} color="brand.500" width="fit-content" fontWeight="bold" mb="4px" ml="4px" mr="4px" mt="15px" fontSize="25px" backgroundColor="brand.200" borderRadius="20px" padding="8px">
+              <Text key={index} color="brand.500" alignSelf="flex-end" width="fit-content" fontWeight="bold" mb="4px" ml="4px" mr="4px" mt={{ md: "8px", lg: "5px" }} fontSize="25px" backgroundColor="brand.200" borderRadius="20px" padding="8px">
                 {chatMessage}
               </Text>
             ))}
           </Flex>
           <Flex mt="auto">
             <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
-              <Text
-                mr={{ md: "6px", lg: "16px" }}
-                ml={{ md: "1px", lg: "5px" }}
-                fontSize="20px"
-                color="brand.400"
-                fontWeight="bold"
-              >
-                Chat
-              </Text>
               <Input
+                ml={{ md: "5px", lg: "6px" }}
                 mr={{ md: "5px", lg: "9px" }}
                 borderColor="brand.400"
                 value={chat}
@@ -142,7 +137,7 @@ export default function Home() {
                 w={{ md: "70px", lg: "20%" }}
                 onClick={handleSubmit}
               >
-                Submit
+                Chat
               </Button>
             </Flex>
           </Flex>
@@ -181,6 +176,6 @@ export default function Home() {
           )}
         </Flex>
       </Flex>
-    </Box>
+    </Box >
   );
 }
