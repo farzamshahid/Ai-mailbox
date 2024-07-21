@@ -108,7 +108,7 @@ export default function Home() {
           </Flex>
           <Divider borderWidth="2px" borderColor="brand.400" />
           <Flex flexDir="column">
-            <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "22px", lg: "25px" }} mt="4px" mb={{ md: "5px", lg: "4px" }} ml="4px">
+            <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "18px", lg: "25px" }} mt="4px" mb={{ md: "5px", lg: "4px" }} ml="4px">
               Hello, how may I assist you?
             </Text>
             {chats.map((chatMessage, index) => (
@@ -120,11 +120,11 @@ export default function Home() {
           <Flex mt="auto">
             <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
               <Input
-                ml={{ md: "5px", lg: "6px" }}
+                ml={{ md: "5px", lg: "7px" }}
                 mr={{ md: "5px", lg: "9px" }}
                 borderColor="brand.400"
                 value={chat}
-                w={{ md: '215px', lg: '300px' }}
+                w={{ md: '250px', lg: '320px' }}
                 placeholder="Type something to chat"
                 color="brand.400"
                 onChange={(e) => setChat(e.target.value)}
