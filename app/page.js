@@ -127,7 +127,7 @@ export default function Home() {
                 borderColor="brand.400"
                 value={chat}
                 w={{
-                  md: '260px', lg: '756px'
+                  md: '34vw', lg: "44vw"
                 }}
                 placeholder="Type something to chat"
                 color="brand.400"
