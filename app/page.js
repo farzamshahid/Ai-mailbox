@@ -89,7 +89,7 @@ export default function Home() {
               borderColor="brand.400"
               value={email}
               w={{
-                md: "600px", lg: "800px"
+                md: "600px", lg: "685px"
               }}
               placeholder="Enter your email"
               color="brand.400"
@@ -127,7 +127,10 @@ export default function Home() {
                 borderColor="brand.400"
                 value={chat}
                 w={{
-                  md: '34vw', lg: "44vw"
+                  md: '34vw',//768px
+                  lg: "41vw",// ~992px
+                  xl: "43.5vw",  // ~1280px
+
                 }}
                 placeholder="Type something to chat"
                 color="brand.400"
@@ -138,7 +141,10 @@ export default function Home() {
                 bgColor="brand.200"
                 _hover={{ backgroundColor: "brand.200" }}
                 mr="2px"
-                w={{ md: "70px", lg: "15%" }}
+                w={{
+                  md: "60px", // ~768px
+                  lg: "64px",// ~992px
+                }}
                 onClick={handleSubmit}
               >
                 Chat
