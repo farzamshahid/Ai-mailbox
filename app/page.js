@@ -110,7 +110,7 @@ export default function Home() {
           </Flex>
           <Divider borderWidth="2px" borderColor="brand.400" />
           <Flex flexDir="column">
-            <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "18px", lg: "25px" }} mt="4px" mb={{ md: "5px", lg: "4px" }} ml="4px" backgroundColor="brand.500" borderRadius="20px" padding="16px">
+            <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "18px", lg: "25px" }} mt="4px" mb={{ md: "5px", lg: "4px" }} ml="4px" backgroundColor="brand.300" borderRadius="20px" padding="16px">
               Hello, how may I assist you?
             </Text>
             {chats.map((chatMessage, index) => (
@@ -127,7 +127,7 @@ export default function Home() {
                 borderColor="brand.400"
                 value={chat}
                 w={{
-                  md: '34vw',//768px
+                  md: '35vw',//768px
                   lg: "41vw",// ~992px
                   xl: "43.5vw",  // ~1280px
 
@@ -142,8 +142,9 @@ export default function Home() {
                 _hover={{ backgroundColor: "brand.200" }}
                 mr="2px"
                 w={{
-                  md: "60px", // ~768px
+                  md: "62px", // ~768px
                   lg: "64px",// ~992px
+                  xl: "66px"//1280px
                 }}
                 onClick={handleSubmit}
               >
