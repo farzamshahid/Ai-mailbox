@@ -36,7 +36,7 @@ export default function Home() {
       setEmail("");
     }
     else {
-      alert('email format is incorrect')
+      alert('email format or email provider name is incorrect')
       setEmail("");
 
     }
