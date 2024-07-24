@@ -8,11 +8,11 @@ const theme = extendTheme({
     },
     colors: {
         brand: {
-            100: "#fffdd0",//creaam
+            100: "#fffdd0",//cream
             200: "#008080",//Teal
             300: "#708090",//SlateGray    
-            400: "#000000",//black color
-            500: "#FFFFFF"//white
+            400: "#000000",//Black 
+            500: "#FFFFFF"//White
         },
     },
 })

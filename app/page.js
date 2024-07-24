@@ -1,9 +1,9 @@
 "use client";
-import { Flex, Box, Heading, Divider, Button } from "@chakra-ui/react";
+import { Flex, Box, Heading, Divider, Button, Tabs, Tab, TabPanel, TabPanels, TabList } from "@chakra-ui/react";
 import { Input, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/sidebar";
-
+// import Code from "@/components/code";
 export default function Home() {
   const [email, setEmail] = useState("");
   const [chat, setChat] = useState("");
@@ -54,6 +54,19 @@ export default function Home() {
       setChats([]);
     }
   }, []);
+  useEffect(() => {
+    let chatValue = localStorage.getItem("email");
+    if (chatValue) {
+      try {
+        setEmails(chatValue);
+      } catch {
+        setEmails('');
+      }
+    } else {
+      setEmails('');
+    }
+  }, []);
+
 
   return (
     <Box fontFamily="sans-serif">
@@ -167,12 +180,26 @@ export default function Home() {
           bgColor="brand.100"
         >
           <Flex flexDir="column">
-            <Box>{emails}</Box>
+            <Box as="div" fontSize="30px">{emails}</Box>
             {eframe && (
               <>
-                <Flex flexDir="column">
-                  <Heading color="brand.400">Output</Heading>
-                  <iframe srcDoc={eframe} width="100%" height="300px"></iframe>
+                <Flex flexDir="row">
+                  <Tabs>
+                    <TabList>
+                      <Tab color="brand.400" fontSize="30px" fontWeight="bold">Code</Tab>
+                      <Tab color="brand.400" fontSize="30px" fontWeight="bold">Preview</Tab>
+                    </TabList>
+                    <TabPanels>
+                      <TabPanel>
+                        <iframe src="../components\code.js" width="100%" height="300px"></iframe>
+                      </TabPanel>
+                      <TabPanel>
+                        <Flex flexDir="column">
+                          <iframe srcDoc={eframe} width="100%" height="300px"></iframe>
+                        </Flex>
+                      </TabPanel>
+                    </TabPanels>
+                  </Tabs>
                 </Flex>
               </>
             )}
