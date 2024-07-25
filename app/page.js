@@ -3,7 +3,6 @@ import { Flex, Box, Heading, Divider, Button, Tabs, Tab, TabPanel, TabPanels, Ta
 import { Input, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/sidebar";
-// import Code from "@/components/code";
 export default function Home() {
   const [email, setEmail] = useState("");
   const [chat, setChat] = useState("");
@@ -11,7 +10,167 @@ export default function Home() {
   const [eframe, setEframe] = useState("");
   const [emails, setEmails] = useState("");
   const [chats, setChats] = useState([]);
+  const [html, setHtml] = useState(`<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email2</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="email-container">
+        <header>
+            <img src="/ollie.png" class="logo">
+        </header>
+        <main>
+            <h1>Welcome to Ollie AI</h1>
+            <p class="inside-Welcome">Use Texagon's special code to unlock <br />your free mental health credits</p>
+            <div class="redeem-code">
+                <input type="text" value="Rs092EROO2J" readonly>
+            </div>
+            <button>Redeem free credits</button>
+            <h2>Here's how to redeem:</h2>
+            <p>To redeem your credits, simply enter the <br />above code into the pop-up once you log in.</p>
+            <p class="ensure">Ensure you sign in with the email was sent to.</p>
+            <div class="email-help">
+                <img src="/email_code_help.jpeg" alt="email">
+            </div>
+        </main>
+        <footer>
+            <img src="/ollie.png">
+            <p>&copy; Ollie Health Inc.</p>
+            <div class="flex">
+                <p>2055 Limestone Rd STE 200-C,Washington,DE,New Castle,US,19808
+                <div class="last-copyright">
+                    <p>&copy;2024</p>
+                </div>
+            </div>
+            </p>
+        </footer>
+    </div>
+</body>
+
+</html>`);
+  const [css, setCss] = useState(`body {
+    font-family: "Inter", sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    background-color: #f4f4f4;
+
+}
+
+
+.email-container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 60px;
+}
+
+main {
+    text-align: center;
+}
+
+
+input {
+    width: 50%;
+    font-size: 16px;
+    padding: 10px 15px;
+    border: none;
+    text-align: center;
+    color: #666;
+    border-radius: 20px;
+    margin-bottom: 15px;
+    cursor: pointer;
+
+}
+
+button {
+    width: 55%;
+    border: none;
+    color: rgb(255, 255, 255);
+    background-color: rgb(92, 42, 197);
+    font-size: 16px;
+    border-radius: 15px;
+    padding: 10px 5px;
+    cursor: pointer;
+}
+
+.inside-Welcome {
+    width: 430px;
+    margin-left: 110px;
+}
+
+.ensure {
+    font-size: 12px;
+    color: #ccc;
+    margin-left: 125px;
+
+}
+
+
+
+.email-help img {
+    max-width: 350px;
+    margin-bottom: 30px;
+}
+
+main p {
+    width: 420px;
+    margin-left: 110px;
+
+}
+
+h2 {
+    font-size: 20px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+footer img {
+    width: 40px;
+}
+
+footer p {
+    color: #333;
+    font-weight: bold;
+    font-size: 10px;
+
+}
+
+
+footer div {
+    display: flex;
+    direction: row;
+    gap: 245px;
+}`);
   const handleSubmit = (e) => {
     e.preventDefault();
     if (chat != "") {
@@ -66,7 +225,49 @@ export default function Home() {
       setEmails('');
     }
   }, []);
+  const Code = ({ html, css }) => {
+    return (
+      <Box bg="gray.500" p={4} m={2} borderRadius="md" overflowX="auto" overflowY="auto">
+        <Heading size="md" mb={2}>
+          HTML
+        </Heading>
+        <pre>
+          <code contentEditable="true">{html || "No HTML yet."}</code>
+        </pre>
+        <Heading size="md" mt={4} mb={2}>
+          CSS
+        </Heading>
+        <pre>
+          <code contentEditable="true">{css || "No CSS yet."}</code>
+        </pre>
+      </Box>
+    );
+  }
+  const Preview = ({ html, css }) => {
+    const [iframeContent, setIframeContent] = useState("");
 
+    useEffect(() => {
+      const content = `
+          <html>
+            <head>
+              <style>${css}</style>
+            </head>
+            <body>${html}
+            </body>
+          </html>
+        `;
+      setIframeContent(content);
+    }, [html, css]);
+    return (
+
+      <iframe
+        srcDoc={iframeContent}
+        style={{ width: "670px", height: "70vh", border: "none", overflowY: "hidden" }}
+        title="Preview"
+        sandbox="allow-scripts"
+      />
+    );
+  };
 
   return (
     <Box fontFamily="sans-serif">
@@ -81,7 +282,7 @@ export default function Home() {
         <Flex
           flexDir="column"
           w={{ md: '45%', lg: '50%' }}
-          h="99vh"
+          h="100vh"
           bgColor="brand.100"
           border="brand.500"
         >
@@ -142,7 +343,7 @@ export default function Home() {
                 w={{
                   md: '35vw',//768px
                   lg: "41vw",// ~992px
-                  xl: "43.5vw",  // ~1280px
+                  xl: "42.5vw",  // ~1280px
 
                 }}
                 placeholder="Type something to chat"
@@ -156,8 +357,8 @@ export default function Home() {
                 mr="2px"
                 w={{
                   md: "62px", // ~768px
-                  lg: "64px",// ~992px
-                  xl: "66px"//1280px
+                  lg: "63px",// ~992px
+                  xl: "65px"//1280px
                 }}
                 onClick={handleSubmit}
               >
@@ -175,12 +376,11 @@ export default function Home() {
         <Flex
           flexDir="column"
           w="50%"
-          h="99vh"
+          h="99.5vh"
           borderWidth="2px"
           bgColor="brand.100"
-        >
-          <Flex flexDir="column">
-            <Box as="div" fontSize="30px">{emails}</Box>
+        >          <Flex flexDir="column">
+            <Box as="div" fontSize={{ md: "20px", lg: "30px" }}>{emails}</Box>
             {eframe && (
               <>
                 <Flex flexDir="row">
@@ -191,12 +391,12 @@ export default function Home() {
                     </TabList>
                     <TabPanels>
                       <TabPanel>
-                        <iframe src="../components\code.js" width="100%" height="300px"></iframe>
+                        <Flex w="40vw" h="81.5vh">
+                          <Code html={html} css={css} />
+                        </Flex>
                       </TabPanel>
                       <TabPanel>
-                        <Flex flexDir="column">
-                          <iframe srcDoc={eframe} width="100%" height="300px"></iframe>
-                        </Flex>
+                        <Preview html={html} css={css} />
                       </TabPanel>
                     </TabPanels>
                   </Tabs>
