@@ -262,7 +262,7 @@ footer div {
 
       <iframe
         srcDoc={iframeContent}
-        style={{ width: "670px", height: "70vh", border: "none", overflowY: "hidden" }}
+        style={{ width: "580px", height: "70vh", border: "none", overflowY: "hidden" }}
         title="Preview"
         sandbox="allow-scripts"
       />
@@ -270,7 +270,7 @@ footer div {
   };
 
   return (
-    <Box fontFamily="sans-serif">
+    <Box fontFamily="sans-serif" h={"100vh"}>
       <Flex flexDir="row" borderColor="brand.400" borderWidth="2px">
         <Sidebar />
         <Divider
@@ -282,7 +282,7 @@ footer div {
         <Flex
           flexDir="column"
           w={{ md: '45%', lg: '50%' }}
-          h="100vh"
+          // h="100vh"
           bgColor="brand.100"
           border="brand.500"
         >
@@ -390,7 +390,7 @@ footer div {
                       <Tab color="brand.400" fontSize="30px" fontWeight="bold">Preview</Tab>
                     </TabList>
                     <TabPanels>
-                      <TabPanel>
+                      <TabPanel p={0}>
                         <Flex w="40vw" h="81.5vh">
                           <Code html={html} css={css} />
                         </Flex>
