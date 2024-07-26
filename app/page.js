@@ -10,18 +10,7 @@ export default function Home() {
   const [eframe, setEframe] = useState("");
   const [emails, setEmails] = useState("");
   const [chats, setChats] = useState([]);
-  const [html, setHtml] = useState(`<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email2</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-</head>
-
+  const [html, setHtml] = useState(`
 <body>
     <div class="email-container">
         <header>
@@ -29,14 +18,20 @@ export default function Home() {
         </header>
         <main>
             <h1>Welcome to Ollie AI</h1>
-            <p class="inside-Welcome">Use Texagon's special code to unlock <br />your free mental health credits</p>
+            <p class="inside-Welcome">Use Texagon's special code to unlock 
+            <br />your free mental health credits
+            </p>
             <div class="redeem-code">
                 <input type="text" value="Rs092EROO2J" readonly>
             </div>
             <button>Redeem free credits</button>
             <h2>Here's how to redeem:</h2>
-            <p>To redeem your credits, simply enter the <br />above code into the pop-up once you log in.</p>
-            <p class="ensure">Ensure you sign in with the email was sent to.</p>
+            <p>To redeem your credits, simply enter the 
+            <br />
+            above code into the pop-up once you log in.</p>
+            <p class="ensure">Ensure you sign in with the
+             email was sent to.
+            </p>
             <div class="email-help">
                 <img src="/email_code_help.jpeg" alt="email">
             </div>
@@ -68,22 +63,22 @@ export default function Home() {
 
 
 .email-container {
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 8px;
+    margin-bottom: 9px;
     background-color: #f9f9f9;
-    padding: 20px;
-    border-radius: 20px;
+    padding: 10px;
+    border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 
 }
 
 header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 12px;
 }
 
 .logo {
-    width: 60px;
+    width: 50px;
 }
 
 main {
@@ -92,75 +87,74 @@ main {
 
 
 input {
-    width: 50%;
-    font-size: 16px;
-    padding: 10px 15px;
+    width: 35%;
+    font-size: 10px;
+    padding: 5px 10px;
     border: none;
     text-align: center;
     color: #666;
-    border-radius: 20px;
-    margin-bottom: 15px;
+    border-radius: 14px;
+    margin-bottom: 2px;
     cursor: pointer;
 
 }
 
 button {
-    width: 55%;
+    width: 30%;
     border: none;
     color: rgb(255, 255, 255);
     background-color: rgb(92, 42, 197);
-    font-size: 16px;
-    border-radius: 15px;
-    padding: 10px 5px;
+    font-size: 12px;
+    border-radius: 13px;
+    padding: 7px 3px;
     cursor: pointer;
 }
 
 .inside-Welcome {
-    width: 430px;
-    margin-left: 110px;
+    width: 410px;
+    margin-left: 75px;
 }
 
 .ensure {
     font-size: 12px;
     color: #ccc;
-    margin-left: 125px;
+    margin-left: 105px;
 
 }
-
 
 
 .email-help img {
-    max-width: 350px;
-    margin-bottom: 30px;
+    max-width: 120px;
+    margin-bottom: 4px;
 }
 
 main p {
-    width: 420px;
-    margin-left: 110px;
+    width: 310px;
+    margin-left: 100px;
 
 }
 
 h2 {
-    font-size: 20px;
+    font-size: 10px;
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
 }
 
 
 h1 {
-    font-size: 24px;
+    font-size: 14px;
     color: #333;
-    margin-bottom: 10px;
+    margin-bottom: 2px;
 }
 
 footer img {
-    width: 40px;
+    width: 27px;
 }
 
 footer p {
     color: #333;
     font-weight: bold;
-    font-size: 10px;
+    font-size: 8px;
 
 }
 
@@ -168,7 +162,7 @@ footer p {
 footer div {
     display: flex;
     direction: row;
-    gap: 245px;
+    gap: 200px;
 }`);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -226,7 +220,7 @@ footer div {
   }, []);
   const Code = ({ html, css }) => {
     return (
-      <Box bg="gray.500" p={4} m={2} borderRadius="md" overflowX="auto" overflowY="auto">
+      <Box bg="gray.500" p={4} m={2} borderRadius="md" overflow="hidden">
         <Heading size="md" mb={2}>
           HTML
         </Heading>
@@ -258,18 +252,19 @@ footer div {
       setIframeContent(content);
     }, [html, css]);
     return (
+      <Box p={4} m={2} borderRadius="md" width="540px" height="75vh" overflow="hidden">
 
-      <iframe
-        srcDoc={iframeContent}
-        style={{ width: "670px", height: "70vh", border: "none", overflowY: "hidden" }}
-        title="Preview"
-        sandbox="allow-scripts"
-      />
+        <iframe
+          srcDoc={iframeContent}
+          style={{ width: "540px", height: "75vh" }}
+          title="Preview"
+          sandbox="allow-scripts"
+        /></Box>
     );
   };
 
   return (
-    <Box fontFamily="sans-serif">
+    <Box fontFamily="sans-serif" h={"100vh"}>
       <Flex flexDir="row" borderColor="brand.400" borderWidth="2px">
         <Sidebar />
         <Divider
@@ -281,7 +276,7 @@ footer div {
         <Flex
           flexDir="column"
           w={{ md: '45%', lg: '50%' }}
-          h="100vh"
+          // h="100vh"
           bgColor="brand.100"
           border="brand.500"
         >
@@ -311,7 +306,7 @@ footer div {
             <Button
               bgColor="brand.200"
               color="brand.500"
-              mb="20px"
+              mb={{ md: "7px", lg: "10px" }}
               mt="10px"
               _hover={{ backgroundColor: "brand.200" }}
               mr="2px"
@@ -375,12 +370,13 @@ footer div {
         <Flex
           flexDir="column"
           w="50%"
-          h="99.5vh"
+          // h="99.5vh"
           borderWidth="2px"
           bgColor="brand.100"
-        >          <Flex flexDir="column">
+        >
+          <Flex flexDir="column">
             <Box as="div" fontSize={{ md: "20px", lg: "30px" }}>{emails}</Box>
-            {eframe && (
+            {eframe &&
               <>
                 <Flex flexDir="row">
                   <Tabs>
@@ -389,8 +385,8 @@ footer div {
                       <Tab color="brand.400" fontSize="30px" fontWeight="bold">Preview</Tab>
                     </TabList>
                     <TabPanels>
-                      <TabPanel>
-                        <Flex w="40vw" h="81.5vh">
+                      <TabPanel p={0}>
+                        <Flex w="40vw" h="83vh">
                           <Code html={html} css={css} />
                         </Flex>
                       </TabPanel>
@@ -401,7 +397,7 @@ footer div {
                   </Tabs>
                 </Flex>
               </>
-            )}
+            }
           </Flex>
           {iframe && (
             <Flex flexDir="column">

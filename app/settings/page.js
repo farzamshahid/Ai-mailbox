@@ -15,8 +15,8 @@ export default function Settings() {
     return (
         <Flex flexDir="row" borderColor="brand.400" borderWidth="2px">
             <Sidebar />
-            <Divider orientation='vertical' borderWidth="2px" h="99vh" borderColor="brand.400" />
-            <Flex w="100%" h="99vh" backgroundColor="brand.100">
+            <Divider orientation='vertical' borderWidth="2px" h="100vh" borderColor="brand.400" />
+            <Flex w="100%" h={{ md: "100vh", lg: "100vh" }} backgroundColor="brand.100">
                 <Tabs>
                     <TabList>
                         <Tab color="brand.400" fontWeight="bold">SMTP</Tab>
