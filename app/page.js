@@ -264,19 +264,18 @@ footer div {
   };
 
   return (
-    <Box fontFamily="sans-serif" h={"100vh"}>
-      <Flex flexDir="row" borderColor="brand.400" borderWidth="2px">
+    <Box fontFamily="sans-serif" h="100vh" overflow="hidden">
+      <Flex flexDir="row" borderColor={{ md: "brand.400", lg: "brand.400" }} borderWidth="2px">
         <Sidebar />
         <Divider
           orientation="vertical"
-          h="99vh"
+          h="100vh"
           borderWidth="2px"
           borderColor="brand.400"
         />
         <Flex
           flexDir="column"
-          w={{ md: '45%', lg: '50%' }}
-          // h="100vh"
+          w={{ md: "45%", lg: "45%" }}
           bgColor="brand.100"
           border="brand.500"
         >
@@ -331,13 +330,13 @@ footer div {
             <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
               <Input
                 ml={{ md: "5px", lg: "7px" }}
-                mr={{ md: "5px", lg: "15px" }}
+                mr={{ md: "5px", lg: "8px" }}
                 borderColor="brand.400"
                 value={chat}
                 w={{
                   md: '35vw',//768px
-                  lg: "41vw",// ~992px
-                  xl: "42.5vw",  // ~1280px
+                  lg: "37vw",// ~992px
+                  xl: "39vw",  // ~1280px
 
                 }}
                 placeholder="Type something to chat"
@@ -350,9 +349,9 @@ footer div {
                 _hover={{ backgroundColor: "brand.200" }}
                 mr="2px"
                 w={{
-                  md: "62px", // ~768px
-                  lg: "63px",// ~992px
-                  xl: "65px"//1280px
+                  md: "61px", // ~768px
+                  lg: "62px",// ~992px
+                  xl: "64px"//1280px
                 }}
                 onClick={handleSubmit}
               >
@@ -363,18 +362,17 @@ footer div {
         </Flex>
         <Divider
           orientation="vertical"
-          h="99vh"
+          h="100vh"
           borderWidth="2px"
           borderColor="brand.400"
         />
         <Flex
           flexDir="column"
-          w="50%"
-          // h="99.5vh"
+          w={{ md: "45%", lg: "45%", xl: "55%" }}
           borderWidth="2px"
           bgColor="brand.100"
         >
-          <Flex flexDir="column">
+          <Flex flexDir="column" >
             <Box as="div" fontSize={{ md: "20px", lg: "30px" }}>{emails}</Box>
             {eframe &&
               <>

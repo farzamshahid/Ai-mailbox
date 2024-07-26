@@ -10,7 +10,7 @@ export const Sidebar = () => {
     const router = useRouter()
     return (
         <Box as='div'>
-            <Flex border="brand.500" w="135px" h='99vh' backgroundColor="brand.100" >
+            <Flex border="brand.500" w="135px" h='100vh' backgroundColor="brand.100" >
                 <Flex flexDir="column">
                     <Flex>
                         <Box as='div'>
