@@ -3,6 +3,8 @@ import { Sidebar } from '@/components/sidebar';
 import { Tabs, TabList, TabPanels, Text, Tab, TabPanel, Input, Divider, Heading, Button, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Select } from '@chakra-ui/react'
+import { supabase } from '@/auth/config';
+import { useRouter } from 'next/navigation';
 export default function Settings() {
     const [server, setServer] = useState('')
     const [port, setPort] = useState()
@@ -12,11 +14,20 @@ export default function Settings() {
     const handleEmail = (e) => {
         setEmail(e.target.value)
     }
+    const router = useRouter()
+
+    const logout = async (e) => {
+        e.preventDefault()
+        const { error } = await supabase.auth.signOut()
+        router.push('/login')
+        if (error) throw error;
+    }
+
     return (
-        <Flex flexDir="row" borderColor="brand.400" borderWidth="2px">
+        <Flex flexDir="row" borderColor="brand.400" borderWidth="2px" >
             <Sidebar />
             <Divider orientation='vertical' borderWidth="2px" h="100vh" borderColor="brand.400" />
-            <Flex w="100%" h={{ md: "100vh", lg: "100vh" }} backgroundColor="brand.100">
+            <Flex w="100vw" h={{ md: "100vh", lg: "100vh" }} backgroundColor="brand.100" overflow="hidden">
                 <Tabs>
                     <TabList>
                         <Tab color="brand.400" fontWeight="bold">SMTP</Tab>
@@ -69,11 +80,12 @@ export default function Settings() {
                             <Flex>
                                 <Button mt="30px" _hover={{ backgroundColor: "brand.200" }} backgroundColor="brand.200" mr="30px" color="brand.500" onClick={() => { console.log(email, userName, password) }}>test</Button>
                                 <Button mt="30px" backgroundColor="brand.200" _hover={{ backgroundColor: "brand.200" }} color="brand.500" onClick={() => { console.log(email, userName, password) }}>Save</Button>
+                                <Button backgroundColor="brand.200" ml="10px" width="fit-content" alignSelf="end" color="brand.500" _hover={{ backgroundColor: "brand.200" }} onClick={logout}>Logout</Button>
                             </Flex>
-
                         </TabPanel>
                     </TabPanels>
                 </Tabs>
+
             </Flex>
         </Flex >
     )

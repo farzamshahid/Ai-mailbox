@@ -1,10 +1,13 @@
 "use client";
-import { Flex, Box, Heading, Divider, Button, Tabs, Tab, TabPanel, TabPanels, TabList } from "@chakra-ui/react";
+import { Flex, Box, Heading, useBreakpointValue, Divider, Button, Tabs, Tab, TabPanel, TabPanels, TabList, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerBody, VStack } from "@chakra-ui/react";
 import { Input, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/sidebar";
-import { supabase } from "@/auth/config";
-import { useRouter } from "next/navigation";
+import { useDisclosure } from '@chakra-ui/react'
+import { IoIosMail } from "react-icons/io";
+import { CiSettings } from "react-icons/ci";
+import { HamburgerIcon } from "@chakra-ui/icons";
+
 export default function Home() {
     const [email, setEmail] = useState("");
     const [chat, setChat] = useState("");
@@ -12,6 +15,9 @@ export default function Home() {
     const [eframe, setEframe] = useState("");
     const [emails, setEmails] = useState("");
     const [chats, setChats] = useState([]);
+    const iframeWidth = useBreakpointValue({ base: "490px", lg: "540px" });
+    const iframeHeight = useBreakpointValue({ base: "70vh", lg: "75vh" });
+    const { isOpen, onOpen, onClose } = useDisclosure()
     const [html, setHtml] = useState(`
 <body>
     <div class="email-container">
@@ -228,7 +234,7 @@ footer div {
                     HTML
                 </Heading>
                 <pre>
-                    <code >{html || "No HTML yet."}</code>
+                    <code contentEditable="true">{html || "No HTML yet."}</code>
                 </pre>
                 <Heading size="md" mt={4} mb={2}>
                     CSS
@@ -256,44 +262,77 @@ footer div {
             setIframeContent(content);
         }, [html, css]);
         return (
-            <Box p={4} m={2} borderRadius="md" width={{ md: "520px", lg: "540px" }} height="75vh" overflow="hidden">
-
+            <Box p={4} m={2} borderRadius="md" width={{ base: "420px", lg: "540px" }} height={{ base: "70px", lg: "75vh" }} overflow="hidden">
                 <iframe
                     srcDoc={iframeContent}
-                    style={{ width: "540px", height: "75vh" }}
+                    style={{ width: iframeWidth, height: iframeHeight }}
                     title="Preview"
                     sandbox="allow-scripts"
                 /></Box>
         );
     };
-    const router = useRouter()
-    const logout = async (e) => {
-        e.preventDefault()
-        const { error } = await supabase.auth.signOut()
-        router.push('/login')
-        if (error) throw error;
-    }
-
     return (
         <Box fontFamily="sans-serif" h="100vh" overflow="hidden">
+            <Box backgroundColor="brand.100" display={{ md: "block", lg: "none" }}>
+                <IconButton
+                    onClick={onOpen}
+                    icon={<HamburgerIcon />}
+                    display={{ base: "block", lg: "none" }}
+                    backgroundColor="brand.100"
+                    zIndex="overlay"
+                />
+
+                <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
+                    <DrawerOverlay />
+                    <DrawerContent>
+                        <DrawerCloseButton />
+                        <DrawerBody backgroundColor="brand.100">
+                            <VStack alignItems="flex-start" overflow="hidden">
+                                <Box as='div' >
+                                    <Flex w="135px" h='100vh' backgroundColor="brand.100" >
+                                        <Flex flexDir="column">
+                                            <Flex>
+                                                <Box as='div'>
+                                                    <IoIosMail fontSize="35px" color="brand.400" />
+                                                </Box>
+                                                <Text ml="7px" mt="10px" mr="10px" fontSize="15px" fontWeight="bold" color="brand.400" _hover={{ cursor: 'pointer' }} onClick={() => router.push('/dashboard')} >AI Mailbox</Text>
+                                            </Flex>
+                                            <Flex alignItems="flex-end" mt="85vh">
+                                                <CiSettings color="brand.400" fontSize="35px" />
+                                                <Text fontSize="15px" ml="7px" mr="10px" mb="5px" fontWeight="bold" color="brand.400" _hover={{ cursor: 'pointer' }} onClick={() => router.push('/settings')}>
+                                                    Settings
+                                                </Text>
+                                            </Flex>
+                                        </Flex>
+                                    </Flex>
+                                </Box >
+                            </VStack>
+                        </DrawerBody>
+                    </DrawerContent>
+                </Drawer>
+            </Box>
             <Flex flexDir="row" borderColor={{ md: "brand.400", lg: "brand.400" }} borderWidth="2px">
-                <Sidebar />
+                <Box display={{ base: "none", lg: "block" }}>
+                    <Sidebar />
+                </Box>
                 <Divider
                     orientation="vertical"
                     h="100vh"
                     borderWidth="2px"
                     borderColor="brand.400"
+                    display={{ base: "none", lg: "block" }}
                 />
                 <Flex
                     flexDir="column"
+                    height={{ base: "92vh", lg: "100vh" }}
                     w={{ md: "45%", lg: "45%" }}
                     bgColor="brand.100"
                     border="brand.500"
                 >
                     <Flex>
                         <Text
-                            mr="10px"
-                            ml="4px"
+                            mr={{ base: "4px", lg: "10px" }}
+                            ml={{ md: "2px", lg: "4px" }}
                             fontSize="20px"
                             mt="16px"
                             fontWeight="bold"
@@ -303,7 +342,7 @@ footer div {
                         </Text>
                         <Input
                             mt="10px"
-                            mr="8px"
+                            mr={{ base: "4px", lg: "8px" }}
                             borderColor="brand.400"
                             value={email}
                             w={{
@@ -337,7 +376,7 @@ footer div {
                             </Text>
                         ))}
                     </Flex>
-                    <Flex mt="auto">
+                    <Flex mt={{ md: "auto", lg: "auto" }} height={{ base: "92vh", lg: "100vh" }}>
                         <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
                             <Input
                                 ml={{ md: "5px", lg: "7px" }}
@@ -379,15 +418,14 @@ footer div {
                 />
                 <Flex
                     flexDir="column"
-                    w={{ md: "45%", lg: "45%", xl: "55%" }}
+                    w={{ base: "55%", lg: "45%", xl: "55%" }}
                     borderWidth="2px"
                     bgColor="brand.100"
                 >
                     <Flex flexDir="column">
-                        <Flex flexDir="row" justify="space-between">
+                        <Flex flexDir="row" >
                             <Box as="div" fontSize={{ md: "20px", lg: "30px" }}>{emails}
                             </Box>
-                            <Button backgroundColor="brand.200" mr={{ md: "7px", lg: "4px" }} width="fit-content" alignSelf="end" color="brand.500" _hover={{ backgroundColor: "brand.200" }} onClick={logout}>Logout</Button>
                         </Flex>
                         {eframe &&
                             <>
@@ -399,7 +437,7 @@ footer div {
                                         </TabList>
                                         <TabPanels>
                                             <TabPanel p={0}>
-                                                <Flex w={{ md: "37vw", lg: "40vw" }} h={{ md: "88vh", lg: "85vh" }}>
+                                                <Flex w={{ md: "53vw", lg: "40vw" }} h={{ md: "78vh", lg: "85vh" }}>
                                                     <Code html={html} css={css} />
                                                 </Flex>
                                             </TabPanel>
@@ -413,12 +451,15 @@ footer div {
                         }
                     </Flex>
                     {iframe && (
-                        <Flex flexDir="column">
-                            <Heading color="brand.400">Output</Heading>
-                            <Box>
-                                <iframe srcDoc={iframe} width="50%" height="200px"></iframe>
-                            </Box>
-                        </Flex>
+                        <>
+                            <Flex flexDir="column">
+                                <Heading color="brand.400">Output</Heading>
+                                <Box>
+                                    <iframe srcDoc={iframe} width="50%" height="200px"></iframe>
+                                </Box>
+
+                            </Flex>
+                        </>
                     )}
                 </Flex>
 

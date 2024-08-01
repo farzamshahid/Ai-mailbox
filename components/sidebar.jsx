@@ -16,7 +16,7 @@ export const Sidebar = () => {
                         <Box as='div'>
                             <IoIosMail fontSize="35px" color="brand.400" />
                         </Box>
-                        <Text ml="7px" mt="10px" mr="10px" fontSize="15px" fontWeight="bold" color="brand.400" _hover={{ cursor: 'pointer' }} onClick={() => router.push('/')} >AI Mailbox</Text>
+                        <Text ml="7px" mt="10px" mr="10px" fontSize="15px" fontWeight="bold" color="brand.400" _hover={{ cursor: 'pointer' }} onClick={() => router.push('/dashboard')} >AI Mailbox</Text>
                     </Flex>
                     <Divider borderWidth="2px" w="105%" borderColor="brand.400" />
                     <Flex alignItems="flex-end" mt="auto">
