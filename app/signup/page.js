@@ -2,7 +2,8 @@
 import React from 'react'
 import { useState } from 'react';
 import { Button, Input, Box, Flex, Text } from '@chakra-ui/react';
-import { supabase } from '@/auth/config'
+
+import { supabase } from '@/config'
 
 import { useRouter } from 'next/navigation';
 const Signup = () => {
