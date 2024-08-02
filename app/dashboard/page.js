@@ -268,7 +268,6 @@ footer div {
             setIframeContent(content);
         }, [html, css, email]);
 
-
         return (
             <Box borderRadius="md" width={{ base: "390px", lg: "540px" }} height={{ base: "350px", lg: "75vh" }} overflow={{ base: "hidden", lg: "hidden" }}>
                 <iframe
