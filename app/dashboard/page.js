@@ -262,7 +262,7 @@ footer div {
             setIframeContent(content);
         }, [html, css]);
         return (
-            <Box p={4} m={2} borderRadius="md" width={{ base: "420px", lg: "540px" }} height={{ base: "70px", lg: "75vh" }} overflow="hidden">
+            <Box p={4} m={2} borderRadius="md" width={{ base: "420px", lg: "540px" }} height={{ lg: "75vh" }} overflow="hidden">
                 <iframe
                     srcDoc={iframeContent}
                     style={{ width: iframeWidth, height: iframeHeight }}
@@ -455,7 +455,7 @@ footer div {
                             <Flex flexDir="column">
                                 <Heading color="brand.400">Output</Heading>
                                 <Box>
-                                    <iframe srcDoc={iframe} width="50%" height="200px"></iframe>
+                                    < iframe srcDoc={iframe} width="50%" height="200px"></iframe>
                                 </Box>
 
                             </Flex>
