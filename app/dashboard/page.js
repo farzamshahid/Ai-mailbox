@@ -7,6 +7,7 @@ import { useDisclosure } from '@chakra-ui/react'
 import { IoIosMail } from "react-icons/io";
 import { CiSettings } from "react-icons/ci";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
     const [email, setEmail] = useState("");
@@ -15,8 +16,9 @@ export default function Home() {
     const [eframe, setEframe] = useState("");
     const [emails, setEmails] = useState("");
     const [chats, setChats] = useState([]);
-    const iframeWidth = useBreakpointValue({ base: "490px", lg: "540px" });
-    const iframeHeight = useBreakpointValue({ base: "70vh", lg: "75vh" });
+    const router = useRouter()
+    const iframeWidth = useBreakpointValue({ base: "420px", lg: "560px" });
+    const iframeHeight = useBreakpointValue({ base: "75vh", lg: "75vh" });
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [html, setHtml] = useState(`
 <body>
@@ -46,11 +48,11 @@ export default function Home() {
         </main>
         <footer>
             <img src="/ollie.png">
-            <p>&copy; Ollie Health Inc.</p>
+            <p class="inc">&copy; Ollie Health Inc.</p>
             <div class="flex">
                 <p>2055 Limestone Rd STE 200-C,Washington,DE,New Castle,US,19808
                 <div class="last-copyright">
-                    <p>&copy;2024</p>
+                    <p class="copyright">&copy;2024</p>
                 </div>
             </div>
             </p>
@@ -163,14 +165,17 @@ footer p {
     color: #333;
     font-weight: bold;
     font-size: 8px;
+margin-left:41px;
 
+    }
+footer .inc{
+margin-left:43px;
 }
-
 
 footer div {
     display: flex;
     direction: row;
-    gap: 200px;
+    gap: 118px;
 }`);
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -195,6 +200,7 @@ footer div {
             setEmails(email);
             setEframe(email);
             setEmail("");
+
         }
         else {
             alert('email format or email provider name is incorrect')
@@ -246,7 +252,7 @@ footer div {
         );
     }
 
-    const Preview = ({ html, css }) => {
+    const Preview = ({ html, css, email }) => {
         const [iframeContent, setIframeContent] = useState("");
 
         useEffect(() => {
@@ -260,11 +266,12 @@ footer div {
           </html>
         `;
             setIframeContent(content);
-        }, [html, css]);
+        }, [html, css, email]);
         return (
-            <Box p={4} m={2} borderRadius="md" width={{ base: "420px", lg: "540px" }} height={{ base: "70px", lg: "75vh" }} overflow="hidden">
+            <Box borderRadius="md" width={{ base: "390px", lg: "540px" }} height={{ base: "350px", lg: "75vh" }} overflow={{ base: "hidden", lg: "hidden" }}>
                 <iframe
                     srcDoc={iframeContent}
+                    overflow={{ base: "hidden", lg: "hidden" }}
                     style={{ width: iframeWidth, height: iframeHeight }}
                     title="Preview"
                     sandbox="allow-scripts"
