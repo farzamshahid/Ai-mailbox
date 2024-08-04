@@ -122,7 +122,7 @@ button {
 
 .inside-Welcome {
     width: 410px;
-    margin-left: 75px;
+    margin-left: 45px;
 }
 
 .ensure {
@@ -140,7 +140,7 @@ button {
 
 main p {
     width: 310px;
-    margin-left: 100px;
+    margin-left: 80px;
 
 }
 
@@ -159,7 +159,9 @@ h1 {
 
 footer img {
     width: 27px;
-}
+margin-left:41px;
+
+    }
 
 footer p {
     color: #333;
@@ -171,12 +173,15 @@ margin-left:41px;
 footer .inc{
 margin-left:43px;
 }
-
+.copyright{
+margin-right:31px;
+}
 footer div {
     display: flex;
     direction: row;
     gap: 118px;
 }`);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (chat != "") {
@@ -222,10 +227,10 @@ footer div {
         }
     }, []);
     useEffect(() => {
-        let chatValue = localStorage.getItem("email");
-        if (chatValue) {
+        let emailValue = localStorage.getItem("email");
+        if (emailValue) {
             try {
-                setEmails(chatValue);
+                setEmails(emailValue);
             } catch {
                 setEmails('');
             }
@@ -252,7 +257,7 @@ footer div {
         );
     }
 
-    const Preview = ({ html, css, email }) => {
+    const Preview = ({ html, css, emails }) => {
         const [iframeContent, setIframeContent] = useState("");
 
         useEffect(() => {
@@ -266,7 +271,7 @@ footer div {
           </html>
         `;
             setIframeContent(content);
-        }, [html, css, email]);
+        }, []);
 
         return (
             <Box borderRadius="md" width={{ base: "390px", lg: "540px" }} height={{ base: "350px", lg: "75vh" }} overflow={{ base: "hidden", lg: "hidden" }}>
@@ -455,6 +460,7 @@ footer div {
                                         </TabPanels>
                                     </Tabs>
                                 </Flex>
+
                             </>
                         }
                     </Flex>
