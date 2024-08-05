@@ -44,7 +44,7 @@ const Signup = () => {
                         </Text>
                     </Flex>
                     <Flex flexDir="row" alignItems="center">
-                        <Text fontWeight="bold" mr="18px" mb="40px" mt="auto">
+                        <Text fontWeight="bold" mr="15px" mb="40px" mt="auto">
                             FullName
                         </Text>
                         <Input type='text' width='40vh' mb="40px" placeholder='Enter your FullName' value={fullName} onChange={(e) => setFullName(e.target.value)} />
@@ -56,7 +56,7 @@ const Signup = () => {
                         <Input type='email' width='40vh' mb="40px" placeholder='Enter your Email' value={email} onChange={(e) => setEmail(e.target.value)} />
                     </Flex>
                     <Flex flexDir="row" alignItems="center">
-                        <Text fontWeight="bold" mr="10px" mt="auto">
+                        <Text fontWeight="bold" mr="11px" mt="auto">
                             Password
                         </Text>
                         <Input type='password' width='40vh' placeholder='Enter your Password' value={password} onChange={(e) => setPassword(e.target.value)} />
