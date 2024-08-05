@@ -3,7 +3,7 @@ import { Sidebar } from '@/components/sidebar';
 import { Tabs, TabList, TabPanels, Text, Tab, TabPanel, Input, Divider, Heading, Button, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Select } from '@chakra-ui/react'
-import { supabase } from '@/app/lib/config'
+import { supabase } from '@/lib/config'
 
 import { useRouter } from 'next/navigation';
 export default function Settings() {

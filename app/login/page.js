@@ -1,7 +1,7 @@
 "use client"
 import { Input, Text, Flex, Box, Button } from '@chakra-ui/react'
 import React, { useState } from 'react'
-import { supabase } from '@/app/lib/config'
+import { supabase } from '@/lib/config'
 import { useRouter } from 'next/navigation'
 const Login = () => {
     const [email, setEmail] = useState('')
