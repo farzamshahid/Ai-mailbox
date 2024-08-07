@@ -1,5 +1,5 @@
 "use client";
-import { Flex, Box, Heading, useBreakpointValue, Divider, Button, Tabs, Tab, TabPanel, TabPanels, TabList, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerBody, VStack } from "@chakra-ui/react";
+import { Flex, Box, Heading, Divider, Button, Tabs, Tab, TabPanel, TabPanels, TabList, IconButton, Drawer, DrawerOverlay, DrawerContent, DrawerCloseButton, DrawerBody, VStack, color } from "@chakra-ui/react";
 import { Input, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Sidebar } from "@/components/sidebar";
@@ -7,18 +7,23 @@ import { useDisclosure } from '@chakra-ui/react'
 import { IoIosMail } from "react-icons/io";
 import { CiSettings } from "react-icons/ci";
 import { HamburgerIcon } from "@chakra-ui/icons";
+import OpenAI from "openai";
 import { useRouter } from "next/navigation";
-
+import Preview from "@/components/preview";
+import Code from "@/components/code";
 export default function Home() {
     const [email, setEmail] = useState("");
     const [chat, setChat] = useState("");
     const [iframe, setIframe] = useState("");
     const [eframe, setEframe] = useState("");
     const [emails, setEmails] = useState("");
+    const client = new OpenAI({
+        apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
+        dangerouslyAllowBrowser: true
+    });
     const [chats, setChats] = useState([]);
     const router = useRouter()
-    const iframeWidth = useBreakpointValue({ base: "420px", lg: "560px" });
-    const iframeHeight = useBreakpointValue({ base: "75vh", lg: "75vh" });
+    const [loading, setloading] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [html, setHtml] = useState(`
 <body>
@@ -134,7 +139,7 @@ button {
 
 
 .email-help img {
-    max-width: 120px;
+    max-width: 90px;
     margin-bottom: 4px;
 }
 
@@ -182,17 +187,6 @@ footer div {
     gap: 118px;
 }`);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (chat != "") {
-            const updatedchat = [...chats, chat];
-            setChats(updatedchat);
-            localStorage.setItem("chat", JSON.stringify(updatedchat));
-            setIframe(chat);
-            setChat("");
-        }
-    };
-
 
     const handleEmail = (e) => {
         e.preventDefault();
@@ -213,6 +207,47 @@ footer div {
 
         }
     };
+    useEffect(() => {
+        let emailValue = localStorage.getItem("email");
+        if (emailValue) {
+            try {
+                setEmails(emailValue);
+            } catch {
+                setEmails('');
+            }
+        } else {
+            setEmails('');
+        }
+    }, []);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (chat != "") {
+            try {
+                console.log('start of try block')
+                setloading(true)
+                const updatedchat = [...chats, { type: "user", message: chat }];
+                setChats(updatedchat);
+                localStorage.setItem("chat", JSON.stringify(updatedchat));
+                const completion = await client.chat.completions.create({
+                    messages: [{ role: "user", content: chat }],
+                    model: "gpt-4o-mini",
+                    temperature: 0.5,
+                });
+                console.log(updatedchat)
+                const reply = completion.choices[0]?.message?.content || 'no Response'
+                console.log(reply)
+                const finalChats = [...updatedchat, { type: "assistant", message: reply }];
+                localStorage.setItem("chat", JSON.stringify(finalChats));
+                console.log(finalChats)
+                setChats(finalChats)
+                setIframe(chat);
+                setChat("");
+            }
+            catch (error) {
+                console.log('Error fetching completion', error);
+            }
+        }
+    };
 
     useEffect(() => {
         let chatValue = localStorage.getItem("chat");
@@ -226,64 +261,7 @@ footer div {
             setChats([]);
         }
     }, []);
-    useEffect(() => {
-        let emailValue = localStorage.getItem("email");
-        if (emailValue) {
-            try {
-                setEmails(emailValue);
-            } catch {
-                setEmails('');
-            }
-        } else {
-            setEmails('');
-        }
-    }, []);
-    const Code = ({ html, css }) => {
-        return (
-            <Box bg="gray.500" p={4} m={2} borderRadius="md" overflow="hidden">
-                <Heading size="md" mb={2}>
-                    HTML
-                </Heading>
-                <pre>
-                    <code contentEditable="true">{html || "No HTML yet."}</code>
-                </pre>
-                <Heading size="md" mt={4} mb={2}>
-                    CSS
-                </Heading>
-                <pre>
-                    <code >{css || "No CSS yet."}</code>
-                </pre>
-            </Box>
-        );
-    }
 
-    const Preview = ({ html, css, emails }) => {
-        const [iframeContent, setIframeContent] = useState("");
-
-        useEffect(() => {
-            const content = `
-          <html>
-            <head>
-              <style>${css}</style>
-            </head>
-            <body>${html}
-            </body>
-          </html>
-        `;
-            setIframeContent(content);
-        }, []);
-
-        return (
-            <Box borderRadius="md" width={{ base: "390px", lg: "540px" }} height={{ base: "350px", lg: "75vh" }} overflow={{ base: "hidden", lg: "hidden" }}>
-                <iframe
-                    srcDoc={iframeContent}
-                    overflow={{ base: "hidden", lg: "hidden" }}
-                    style={{ width: iframeWidth, height: iframeHeight }}
-                    title="Preview"
-                    sandbox="allow-scripts"
-                /></Box>
-        );
-    };
     return (
         <Box fontFamily="sans-serif" h="100vh" overflow="hidden">
             <Box backgroundColor="brand.100" display={{ md: "block", lg: "none" }}>
@@ -337,7 +315,7 @@ footer div {
                 />
                 <Flex
                     flexDir="column"
-                    height={{ base: "92vh", lg: "100vh" }}
+                    height={{ base: "93vh", lg: "99.5vh" }}
                     w={{ md: "45%", lg: "45%" }}
                     bgColor="brand.100"
                     border="brand.500"
@@ -380,14 +358,21 @@ footer div {
                     </Flex>
                     <Divider borderWidth="2px" borderColor="brand.400" />
                     <Flex flexDir="column">
-                        <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "18px", lg: "25px" }} mt="4px" mb={{ md: "5px", lg: "4px" }} ml="4px" backgroundColor="brand.300" borderRadius="20px" padding="16px">
+                        <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "14px", lg: "20px" }} mt={{ md: "4px", lg: "6px" }} mb={{ md: "5px", lg: "4px" }} ml={{ md: "4px", lg: "6px" }} backgroundColor="brand.300" borderRadius="20px" padding="12px">
                             Hello, how may I assist you?
                         </Text>
-                        {chats.map((chatMessage, index) => (
-                            <Text key={index} color="brand.500" alignSelf="flex-end" fontWeight="bold" mb="4px" ml="4px" mr="4px" mt={{ md: "8px", lg: "5px" }} fontSize="25px" backgroundColor="brand.200" borderRadius="20px" padding="16px">
-                                {chatMessage}
-                            </Text>
-                        ))}
+                        {
+                            chats &&
+                            chats.map((chatMessage, index) => (
+                                <Flex key={index} sx={{ justifyContent: chatMessage.type === 'user' ? 'flex-end' : 'flex-start' }}>
+                                    <Flex flexDir="row" sx={{ backgroundColor: chatMessage.type === 'user' ? 'brand.200' : 'brand.300' }} mb="4px" ml="4px" mr="4px" width="fit-content" borderRadius="15px" padding="8px" justifyContent={{ base: "center", lg: "center" }} alignItems={{ base: "center", lg: "center" }} pt="7px" >
+                                        <Text color="brand.500" sx={{ color: chatMessage.type === 'user' ? 'brand.500' : 'brand.400' }} fontWeight="bold" mt={{ md: "8px", lg: "5px" }} fontSize="20px">
+                                            {chatMessage.message}
+                                        </Text>
+
+                                    </Flex>
+                                </Flex>
+                            ))}
                     </Flex>
                     <Flex mt={{ md: "auto", lg: "auto" }} height={{ base: "92vh", lg: "100vh" }}>
                         <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">

@@ -28,7 +28,7 @@ export default function Settings() {
         <Flex flexDir="row" borderColor="brand.400" borderWidth="2px" >
             <Sidebar />
             <Divider orientation='vertical' borderWidth="2px" h="100vh" borderColor="brand.400" />
-            <Flex w="100vw" h={{ md: "100vh", lg: "100vh" }} backgroundColor="brand.100" overflow="hidden">
+            <Flex w="100vw" h={{ md: "100vh", lg: "100vh" }} backgroundColor="brand.100" >
                 <Tabs>
                     <TabList>
                         <Tab color="brand.400" fontWeight="bold">SMTP</Tab>

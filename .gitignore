@@ -5,7 +5,7 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
-
+NEXT_PUBLIC_OPENAI_API_KEY
 # testing
 /coverage
 
