@@ -1,6 +1,6 @@
 "use client"
 import { Sidebar } from '@/components/sidebar';
-import { Tabs, TabList, TabPanels, Text, Tab, TabPanel, Input, Divider, Heading, Button, Flex } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Text, Tab, TabPanel, Input, Divider, Box, Button, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Select } from '@chakra-ui/react'
 import { supabase } from '@/lib/config'
@@ -25,10 +25,12 @@ export default function Settings() {
     }
 
     return (
-        <Flex flexDir="row" borderColor="brand.400" borderWidth="2px" >
+
+<Flex flexDir="row"  borderColor="brand.400" borderWidth="2px" w="100vw" h={{ sm: "100vh", lg: "100vh" }} overflow="hidden">
             <Sidebar />
-            <Divider orientation='vertical' borderWidth="2px" h="100vh" borderColor="brand.400" />
-            <Flex w="100vw" h={{ md: "100vh", lg: "100vh" }} backgroundColor="brand.100" >
+            <Divider orientation='vertical'  borderWidth="2px" h="100vh" borderColor="brand.400" />
+
+            <Flex  backgroundColor="brand.100" w="100vw" h={{ sm: "100vh", lg: "100vh" }} >
                 <Tabs>
                     <TabList>
                         <Tab color="brand.400" fontWeight="bold">SMTP</Tab>
@@ -88,6 +90,7 @@ export default function Settings() {
                 </Tabs>
 
             </Flex>
+
         </Flex >
     )
 }

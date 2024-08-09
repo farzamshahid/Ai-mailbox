@@ -1,8 +1,7 @@
 import { Box, Heading } from "@chakra-ui/react";
-
 const Code = ({ html, css }) => {
     return (
-        <Box bg="gray.500" p={4} m={2} borderRadius="md" overflow="hidden">
+        <Box bg="gray.300" p={4} m={2} borderRadius="md" overflow="hidden">
             <Heading size="md" mb={2}>
                 HTML
             </Heading>

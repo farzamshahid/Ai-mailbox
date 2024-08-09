@@ -23,7 +23,6 @@ export default function Home() {
     });
     const [chats, setChats] = useState([]);
     const router = useRouter()
-    const [loading, setloading] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [html, setHtml] = useState(`
 <body>
@@ -208,7 +207,7 @@ footer div {
         }
     };
     useEffect(() => {
-        let emailValue = localStorage.getItem("email");
+        const emailValue = localStorage.getItem("email");
         if (emailValue) {
             try {
                 setEmails(emailValue);
@@ -221,20 +220,20 @@ footer div {
     }, []);
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (chat != "") {
+        if (chat !== "") {
             try {
                 console.log('start of try block')
-                setloading(true)
                 const updatedchat = [...chats, { type: "user", message: chat }];
                 setChats(updatedchat);
                 localStorage.setItem("chat", JSON.stringify(updatedchat));
                 const completion = await client.chat.completions.create({
                     messages: [{ role: "user", content: chat }],
                     model: "gpt-4o-mini",
-                    temperature: 0.5,
+                    temperature: 0.2,
+                    response_format: { type: "json_object" },
                 });
                 console.log(updatedchat)
-                const reply = completion.choices[0]?.message?.content || 'no Response'
+                const reply = JSON.stringify(completion.choices[0].message.content) 
                 console.log(reply)
                 const finalChats = [...updatedchat, { type: "assistant", message: reply }];
                 localStorage.setItem("chat", JSON.stringify(finalChats));
@@ -250,7 +249,7 @@ footer div {
     };
 
     useEffect(() => {
-        let chatValue = localStorage.getItem("chat");
+        const chatValue = localStorage.getItem("chat");
         if (chatValue) {
             try {
                 setChats(JSON.parse(chatValue));
@@ -264,11 +263,11 @@ footer div {
 
     return (
         <Box fontFamily="sans-serif" h="100vh" overflow="hidden">
-            <Box backgroundColor="brand.100" display={{ md: "block", lg: "none" }}>
+            <Box backgroundColor="brand.100" display={{ sm: "block", lg: "none" }}>
                 <IconButton
                     onClick={onOpen}
                     icon={<HamburgerIcon />}
-                    display={{ base: "block", lg: "none" }}
+                    display={{ sm: "block", lg: "none" }}
                     backgroundColor="brand.100"
                     zIndex="overlay"
                 />
@@ -302,8 +301,8 @@ footer div {
                     </DrawerContent>
                 </Drawer>
             </Box>
-            <Flex flexDir="row" borderColor={{ md: "brand.400", lg: "brand.400" }} borderWidth="2px">
-                <Box display={{ base: "none", lg: "block" }}>
+            <Flex flexDir="row" borderColor={{ sm: "brand.400", lg: "brand.400" }} borderWidth="2px">
+                <Box display={{ sm: "none", lg: "block" }}>
                     <Sidebar />
                 </Box>
                 <Divider
@@ -311,19 +310,19 @@ footer div {
                     h="100vh"
                     borderWidth="2px"
                     borderColor="brand.400"
-                    display={{ base: "none", lg: "block" }}
+                    display={{ sm: "none", lg: "block" }}
                 />
                 <Flex
                     flexDir="column"
-                    height={{ base: "93vh", lg: "99.5vh" }}
-                    w={{ md: "45%", lg: "45%" }}
+                    height={{ sm: "93vh", lg: "99.5vh" }}
+                    w={{ sm: "45%", lg: "45%" }}
                     bgColor="brand.100"
                     border="brand.500"
                 >
                     <Flex>
                         <Text
-                            mr={{ base: "4px", lg: "10px" }}
-                            ml={{ md: "2px", lg: "4px" }}
+                            mr={{ sm: "4px", lg: "10px" }}
+                            ml={{ sm: "2px", lg: "4px" }}
                             fontSize="20px"
                             mt="16px"
                             fontWeight="bold"
@@ -333,11 +332,11 @@ footer div {
                         </Text>
                         <Input
                             mt="10px"
-                            mr={{ base: "4px", lg: "8px" }}
+                            mr={{ sm: "4px", lg: "8px" }}
                             borderColor="brand.400"
                             value={email}
                             w={{
-                                md: "600px", lg: "685px"
+                                sm: "600px", lg: "685px"
                             }}
                             placeholder="Enter your email"
                             color="brand.400"
@@ -346,7 +345,7 @@ footer div {
                         <Button
                             bgColor="brand.200"
                             color="brand.500"
-                            mb={{ md: "7px", lg: "10px" }}
+                            mb={{ sm: "7px", lg: "10px" }}
                             mt="10px"
                             _hover={{ backgroundColor: "brand.200" }}
                             mr="2px"
@@ -358,31 +357,32 @@ footer div {
                     </Flex>
                     <Divider borderWidth="2px" borderColor="brand.400" />
                     <Flex flexDir="column">
-                        <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "14px", lg: "20px" }} mt={{ md: "4px", lg: "6px" }} mb={{ md: "5px", lg: "4px" }} ml={{ md: "4px", lg: "6px" }} backgroundColor="brand.300" borderRadius="20px" padding="12px">
+                        <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ sm: "14px", lg: "20px" }} mt={{ sm: "4px", lg: "6px" }} mb={{ sm: "5px", lg: "4px" }} ml={{ sm: "4px", lg: "6px" }} backgroundColor="brand.300" borderRadius="20px" padding="12px">
                             Hello, how may I assist you?
                         </Text>
                         {
-                            chats &&
-                            chats.map((chatMessage, index) => (
-                                <Flex key={index} sx={{ justifyContent: chatMessage.type === 'user' ? 'flex-end' : 'flex-start' }}>
-                                    <Flex flexDir="row" sx={{ backgroundColor: chatMessage.type === 'user' ? 'brand.200' : 'brand.300' }} mb="4px" ml="4px" mr="4px" width="fit-content" borderRadius="15px" padding="8px" justifyContent={{ base: "center", lg: "center" }} alignItems={{ base: "center", lg: "center" }} pt="7px" >
-                                        <Text color="brand.500" sx={{ color: chatMessage.type === 'user' ? 'brand.500' : 'brand.400' }} fontWeight="bold" mt={{ md: "8px", lg: "5px" }} fontSize="20px">
+                            chats?.map((chatMessage, index) => (
+                            <Flex key={index.id} sx={{ justifyContent: chatMessage.type === 'user' ? 'flex-end' : 'flex-start' }}>
+                                    <Flex flexDir="row" sx={{ backgroundColor: chatMessage.type === 'user' ? 'brand.200' : 'brand.300' }} mb="4px" ml="4px" mr="8px" width="fit-content" borderRadius="15px" padding="8px" justifyContent={{ sm: "center", lg: "center" }} alignItems={{ sm: "center", lg: "center" }} pt="7px" >
+                                        <Text color="brand.500" sx={{ color: chatMessage.type === 'user' ? 'brand.500' : 'brand.400' }}  fontWeight="bold" mt={{ sm: "8px", lg: "5px" }} fontSize="20px">
                                             {chatMessage.message}
                                         </Text>
 
                                     </Flex>
                                 </Flex>
-                            ))}
+                            )
+                            )
+                            }
                     </Flex>
-                    <Flex mt={{ md: "auto", lg: "auto" }} height={{ base: "92vh", lg: "100vh" }}>
+                    <Flex mt={{ sm: "auto", lg: "auto" }} height={{ sm: "92vh", lg: "100vh" }}>
                         <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
                             <Input
-                                ml={{ md: "5px", lg: "7px" }}
-                                mr={{ md: "5px", lg: "8px" }}
+                                ml={{ sm: "5px", lg: "7px" }}
+                                mr={{ sm: "5px", lg: "8px" }}
                                 borderColor="brand.400"
                                 value={chat}
                                 w={{
-                                    md: '35vw',//768px
+                                    sm: '35vw',//768px
                                     lg: "37vw",// ~992px
                                     xl: "39vw",  // ~1280px
 
@@ -397,7 +397,7 @@ footer div {
                                 _hover={{ backgroundColor: "brand.200" }}
                                 mr="2px"
                                 w={{
-                                    md: "61px", // ~768px
+                                    sm: "61px", // ~768px
                                     lg: "62px",// ~992px
                                     xl: "62px"//1280px
                                 }}
@@ -416,13 +416,13 @@ footer div {
                 />
                 <Flex
                     flexDir="column"
-                    w={{ base: "55%", lg: "45%", xl: "55%" }}
+                    w={{ sm: "55%", lg: "45%", xl: "55%" }}
                     borderWidth="2px"
                     bgColor="brand.100"
                 >
                     <Flex flexDir="column">
                         <Flex flexDir="row" >
-                            <Box as="div" fontSize={{ md: "20px", lg: "30px" }}>{emails}
+                            <Box as="div" fontSize={{ sm: "20px", lg: "30px" }}>{emails}
                             </Box>
                         </Flex>
                         {eframe &&
@@ -435,7 +435,7 @@ footer div {
                                         </TabList>
                                         <TabPanels>
                                             <TabPanel p={0}>
-                                                <Flex w={{ md: "53vw", lg: "40vw" }} h={{ md: "78vh", lg: "85vh" }}>
+                                                <Flex w={{ sm: "53vw", lg: "40vw" }} h={{ sm: "78vh", lg: "85vh" }}>
                                                     <Code html={html} css={css} />
                                                 </Flex>
                                             </TabPanel>
@@ -454,7 +454,7 @@ footer div {
                             <Flex flexDir="column">
                                 <Heading color="brand.400">Output</Heading>
                                 <Box>
-                                    <iframe srcDoc={iframe} width="50%" height="200px"></iframe>
+                                    <iframe title="chatIframe" srcDoc={iframe} width="50%" height="200px"/>
                                 </Box>
 
                             </Flex>
