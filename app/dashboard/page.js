@@ -7,11 +7,13 @@ import { useDisclosure } from '@chakra-ui/react'
 import { IoIosMail } from "react-icons/io";
 import { CiSettings } from "react-icons/ci";
 import { Spinner } from "@chakra-ui/react";
+import { Spinner } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import OpenAI from "openai";
 import { useRouter } from "next/navigation";
 import Preview from "@/components/preview";
 import Code from "@/components/code";
+
 
 export default function Home() {
     const [email, setEmail] = useState("");
@@ -162,6 +164,8 @@ footer img {
     width: 27px;
     margin-left:41px;
 }
+    margin-left:41px;
+}
 
 footer p {
     color: #333;
@@ -172,11 +176,20 @@ footer p {
 
 footer .inc {
     margin-left:43px;
+    margin-left:41px;
+}
+
+footer .inc {
+    margin-left:43px;
 }
 
 .copyright {
     margin-right:31px;
+
+.copyright {
+    margin-right:31px;
 }
+
 
 footer div {
     display: flex;
@@ -202,6 +215,7 @@ footer div {
         }
     };
 
+
     useEffect(() => {
         const emailValue = localStorage.getItem("email");
         if (emailValue) {
@@ -214,6 +228,7 @@ footer div {
             setEmails('');
         }
     }, []);
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -259,6 +274,10 @@ footer div {
                 console.log(finalChats)
                 setIframe(chat);
                 setChat("");
+                console.log(htmlCode)
+                console.log(cssCode)
+                console.log(jsCode)
+
                 console.log(htmlCode)
                 console.log(cssCode)
                 console.log(jsCode)
