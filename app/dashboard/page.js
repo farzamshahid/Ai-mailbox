@@ -13,7 +13,6 @@ import { useRouter } from "next/navigation";
 import Preview from "@/components/preview";
 import Code from "@/components/code";
 
-
 export default function Home() {
     const [email, setEmail] = useState("");
     const [chat, setChat] = useState("");
