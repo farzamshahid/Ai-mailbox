@@ -21,11 +21,11 @@ const Preview = ({ html, css, js }) => {
   }, [html, css, js]);
 
   return (
-    <Box borderRadius="md" width={{ sm: "397px", lg: "399px", xl: "540px", "2xl": "540px" }} height={{ sm: "72vh", lg: "65vh", xl: "76vh", '2xl': "45vh" }} overflow="hidden">
+    <Box borderRadius="md" width={{ sm: "397px", lg: "399px", xl: "540px", "2xl": "540px" }} height={{ sm: "72vh", lg: "65vh", xl: "76vh", '2xl': "45vh" }} overflow={{ sm: "auto", lg: "auto", xl: "hidden", "2xl": "hidden" }} >
       {iframeContent ? (
         <iframe
           srcDoc={iframeContent}
-          style={{ width: iframeWidth, height: iframeHeight, border: '1px solid #ccc' }}
+          style={{ width: iframeWidth, height: iframeHeight, overflow: "hidden" }}
           title="Preview"
           sandbox="allow-scripts"
         />

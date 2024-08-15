@@ -6,6 +6,7 @@ import { Sidebar } from "@/components/sidebar";
 import { useDisclosure } from '@chakra-ui/react'
 import { IoIosMail } from "react-icons/io";
 import { CiSettings } from "react-icons/ci";
+import { Spinner } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import OpenAI from "openai";
 import { useRouter } from "next/navigation";
@@ -18,6 +19,7 @@ export default function Home() {
     const [iframe, setIframe] = useState("");
     const [eframe, setEframe] = useState("");
     const [emails, setEmails] = useState("");
+    const [loading, setLoading] = useState(false)
     const client = new OpenAI({
         apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
         dangerouslyAllowBrowser: true
@@ -216,6 +218,7 @@ footer div {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (chat !== "") {
+            setLoading(true)
             try {
                 console.log('start of try block')
                 const updatedchat = [...chats, { type: "user", message: chat }];
@@ -238,14 +241,13 @@ footer div {
                     temperature: 0.2,
                     response_format: { type: "json_object" },
                 });
-
                 console.log(updatedchat)
                 const reply = completion.choices[0].message.content;
+                setLoading(false)
                 console.log(reply)
                 const parseContent = JSON.parse(reply)
                 console.log(parseContent)
 
-                // Format the JSON response for display
                 const formattedReply = `HTML:\n${parseContent.HTML}\n\nCSS:\n${parseContent.CSS}\n\nJavaScript:\n${parseContent.Javascript}`;
 
                 const finalChats = [...updatedchat, { type: "assistant", message: formattedReply }];
@@ -257,15 +259,17 @@ footer div {
                 console.log(finalChats)
                 setIframe(chat);
                 setChat("");
+                console.log(htmlCode)
+                console.log(cssCode)
+                console.log(jsCode)
+
             }
             catch (error) {
                 console.log('Error fetching completion', error);
+                setLoading(false)
             }
         }
     };
-    console.log(htmlCode)
-    console.log(cssCode)
-    console.log(jsCode)
 
     useEffect(() => {
         const chatValue = localStorage.getItem("chat");
@@ -337,7 +341,7 @@ footer div {
                     w={{ sm: "45%", lg: "45%" }}
                     bgColor="brand.100"
                     border="brand.500"
-                    flexGrow={1}
+                    flexGrow={{ sm: 1, lg: 1 }}
                 >
                     <Flex>
                         <Text
@@ -376,7 +380,7 @@ footer div {
                         </Button>
                     </Flex>
                     <Divider borderWidth="2px" borderColor="brand.400" />
-                    <Flex flexDir="column" flex="1" overflow="auto" maxHeight="calc(100vh - 200px)">
+                    <Flex flexDir="column" flex={{ sm: "1", lg: "1" }} overflow={{ sm: "auto", lg: "auto" }} maxHeight={{ sm: "calc(100vh - 160px)", lg: "calc(100vh - 170px)" }}>
                         <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ sm: "14px", lg: "20px" }} mt={{ sm: "4px", lg: "6px" }} mb={{ sm: "5px", lg: "4px" }} ml={{ sm: "4px", lg: "6px" }} backgroundColor="brand.300" borderRadius="20px" padding="12px">
                             Hello, how may I assist you?
                         </Text>
@@ -396,38 +400,53 @@ footer div {
                             </Flex>
                         ))}
                     </Flex>
-                    <Flex mt={{ sm: "auto", lg: "auto" }} mb={{ sm: "1", lg: "2" }}>
-                        <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end" width="100%">
-                            <Input
-                                ml={{ sm: "5px", lg: "7px" }}
-                                mr={{ sm: "5px", lg: "8px" }}
-                                borderColor="brand.400"
-                                value={chat}
-                                w={{
-                                    sm: '35vw',
-                                    lg: "37vw",
-                                    xl: "39vw",
-                                }}
-                                placeholder="Type something to chat"
-                                color="brand.400"
-                                onChange={(e) => setChat(e.target.value)}
-                            />
-                            <Button
-                                color="brand.500"
-                                bgColor="brand.200"
-                                _hover={{ backgroundColor: "brand.200" }}
-                                mr="2px"
-                                w={{
-                                    sm: "61px",
-                                    lg: "62px",
-                                    xl: "62px"
-                                }}
-                                onClick={handleSubmit}
-                            >
-                                Chat
-                            </Button>
-                        </Flex>
-                    </Flex>
+                    {loading ? (
+                        <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="brand.200"
+                            size="lg"
+                            position="center"
+                            mr="2px"
+                        />
+                    )
+                        : (
+                            <Flex mt={{ sm: "auto", lg: "auto" }} mb={{ sm: "1", lg: "2" }}>
+                                <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end" width="100%">
+                                    <Input
+                                        ml={{ sm: "5px", lg: "7px" }}
+                                        mr={{ sm: "5px", lg: "8px" }}
+                                        borderColor="brand.400"
+                                        value={chat}
+                                        w={{
+                                            sm: '36.5vw',
+                                            lg: "37vw",
+                                            xl: "39vw",
+                                        }}
+                                        placeholder="Type something to chat"
+                                        isDisabled={loading}
+                                        color="brand.400"
+                                        onChange={(e) => setChat(e.target.value)}
+                                    />
+
+                                    <Button
+                                        color="brand.500"
+                                        bgColor="brand.200"
+                                        _hover={{ backgroundColor: "brand.200" }}
+                                        mr="2px"
+                                        w={{
+                                            sm: "61px",
+                                            lg: "62px",
+                                            xl: "62px"
+                                        }}
+                                        onClick={handleSubmit}
+                                    >
+                                        Chat
+                                    </Button>
+
+                                </Flex>
+                            </Flex>
+                        )}
                 </Flex>
                 <Divider
                     orientation="vertical"

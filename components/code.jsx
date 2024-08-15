@@ -1,7 +1,7 @@
 import { Box, Tabs, TabList, Tab, TabPanel, TabPanels } from "@chakra-ui/react";
 const Code = ({ html, css, js }) => {
     return (
-        <Box bg="gray.300" p={4} m={2} borderRadius="md" overflow="hidden">
+        <Box bg="gray.300" p={4} m={2} borderRadius="md" overflow={{ sm: "auto", lg: "auto" }}>
             <Tabs>
                 <TabList>
                     <Tab color="brand.400" fontSize="20px" fontWeight="bold">HTML</Tab>
@@ -10,15 +10,16 @@ const Code = ({ html, css, js }) => {
                 </TabList>
                 <TabPanels>
                     <TabPanel p={0}>
-                        <pre>
+                        <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
                             <code >{html || "No HTML yet."}</code></pre>
                     </TabPanel>
                     <TabPanel>
-                        <pre>
+                        <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
                             <code >{css || "No HTML yet."}</code></pre>
                     </TabPanel>
                     <TabPanel>
-                        <pre>
+                        <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+
                             <code >{js || "No HTML yet."}</code></pre>
                     </TabPanel>
 
