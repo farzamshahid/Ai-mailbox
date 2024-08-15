@@ -1,6 +1,6 @@
 "use client"
 import { Sidebar } from '@/components/sidebar';
-import { Tabs, TabList, TabPanels, Text, Tab, TabPanel, Input, Divider, Heading, Button, Flex } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Text, Tab, TabPanel, Input, Divider, Box, Button, Flex } from '@chakra-ui/react'
 import { useState } from 'react'
 import { Select } from '@chakra-ui/react'
 import { supabase } from '@/lib/config'
@@ -25,10 +25,12 @@ export default function Settings() {
     }
 
     return (
-        <Flex flexDir="row" borderColor="brand.400" borderWidth="2px" >
+
+        <Flex flexDir="row" borderColor="brand.400" borderWidth="2px" w="100vw" h={{ sm: "100vh", lg: "100vh" }} overflow="hidden">
             <Sidebar />
             <Divider orientation='vertical' borderWidth="2px" h="100vh" borderColor="brand.400" />
-            <Flex w="100vw" h={{ md: "100vh", lg: "100vh" }} backgroundColor="brand.100" >
+
+            <Flex backgroundColor="brand.100" w="100vw" h={{ sm: "100vh", lg: "100vh" }} >
                 <Tabs>
                     <TabList>
                         <Tab color="brand.400" fontWeight="bold">SMTP</Tab>
@@ -51,7 +53,7 @@ export default function Settings() {
                             </Text>
                             <Text mt="15px" fontWeight="bold" color="brand.400">
                                 Password
-                                <Input w="300px" borderColor="brand.400" type='password' ml="17px" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <Input w="300px" borderColor="brand.400" type='password' ml="16px" value={password} onChange={(e) => setPassword(e.target.value)} />
                             </Text>
                             <Flex>
                                 <Button color="brand.500" _hover={{ backgroundColor: "brand.200" }} backgroundColor="brand.200" mt="30px" mr="30px" onClick={() => { console.log(password, server, port, userName, password, email) }}>test</Button>
@@ -64,7 +66,7 @@ export default function Settings() {
                                     Email
                                 </Text>
                                 <Select borderColor="brand.400" w="300px" color="brand.400" fontWeight="bold" placeholder='Select option' value={email} onChange={handleEmail}>
-                                    <option name='gmail'  >Gmail</option>
+                                    <option name='gmail'>Gmail</option>
                                     <option name='yahoo'>Yahoo</option>
                                     <option name="hotmail" value='hotmail'>Hotmail</option>
                                 </Select>
@@ -76,7 +78,7 @@ export default function Settings() {
                             </Text>
                             <Text mt="15px" color="brand.400" fontWeight="bold">
                                 Password
-                                <Input w="300px" ml="20px" borderColor="brand.400" color="brand.400" type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <Input w="300px" ml="18px" borderColor="brand.400" color="brand.400" type='password' value={password} onChange={(e) => setPassword(e.target.value)} />
                             </Text>
                             <Flex>
                                 <Button mt="30px" _hover={{ backgroundColor: "brand.200" }} backgroundColor="brand.200" mr="30px" color="brand.500" onClick={() => { console.log(email, userName, password) }}>test</Button>
@@ -88,6 +90,7 @@ export default function Settings() {
                 </Tabs>
 
             </Flex>
+
         </Flex >
     )
 }

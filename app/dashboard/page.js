@@ -6,25 +6,30 @@ import { Sidebar } from "@/components/sidebar";
 import { useDisclosure } from '@chakra-ui/react'
 import { IoIosMail } from "react-icons/io";
 import { CiSettings } from "react-icons/ci";
+import { Spinner } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import OpenAI from "openai";
 import { useRouter } from "next/navigation";
 import Preview from "@/components/preview";
 import Code from "@/components/code";
+
 export default function Home() {
     const [email, setEmail] = useState("");
     const [chat, setChat] = useState("");
     const [iframe, setIframe] = useState("");
     const [eframe, setEframe] = useState("");
     const [emails, setEmails] = useState("");
+    const [loading, setLoading] = useState(false)
     const client = new OpenAI({
         apiKey: process.env.NEXT_PUBLIC_OPENAI_API_KEY,
         dangerouslyAllowBrowser: true
     });
     const [chats, setChats] = useState([]);
     const router = useRouter()
-    const [loading, setloading] = useState(false)
     const { isOpen, onOpen, onClose } = useDisclosure()
+    const [htmlCode, setHTMLCode] = useState('')
+    const [cssCode, setCssCode] = useState('')
+    const [jsCode, setJsCode] = useState('')
     const [html, setHtml] = useState(`
 <body>
     <div class="email-container">
@@ -73,9 +78,7 @@ export default function Home() {
     justify-content: center;
     margin: 0;
     background-color: #f4f4f4;
-
 }
-
 
 .email-container {
     margin-top: 8px;
@@ -84,7 +87,6 @@ export default function Home() {
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
 }
 
 header {
@@ -100,7 +102,6 @@ main {
     text-align: center;
 }
 
-
 input {
     width: 35%;
     font-size: 10px;
@@ -111,7 +112,6 @@ input {
     border-radius: 14px;
     margin-bottom: 2px;
     cursor: pointer;
-
 }
 
 button {
@@ -134,9 +134,7 @@ button {
     font-size: 12px;
     color: #ccc;
     margin-left: 105px;
-
 }
-
 
 .email-help img {
     max-width: 90px;
@@ -146,7 +144,6 @@ button {
 main p {
     width: 310px;
     margin-left: 80px;
-
 }
 
 h2 {
@@ -154,7 +151,6 @@ h2 {
     color: #333;
     margin-bottom: 2px;
 }
-
 
 h1 {
     font-size: 14px;
@@ -164,29 +160,29 @@ h1 {
 
 footer img {
     width: 27px;
-margin-left:41px;
-
-    }
+    margin-left:41px;
+}
 
 footer p {
     color: #333;
     font-weight: bold;
     font-size: 8px;
-margin-left:41px;
+    margin-left:41px;
+}
 
-    }
-footer .inc{
-margin-left:43px;
+footer .inc {
+    margin-left:43px;
 }
-.copyright{
-margin-right:31px;
+
+.copyright {
+    margin-right:31px;
 }
+
 footer div {
     display: flex;
     direction: row;
     gap: 118px;
 }`);
-
 
     const handleEmail = (e) => {
         e.preventDefault();
@@ -199,16 +195,15 @@ footer div {
             setEmails(email);
             setEframe(email);
             setEmail("");
-
         }
         else {
             alert('email format or email provider name is incorrect')
             setEmail("");
-
         }
     };
+
     useEffect(() => {
-        let emailValue = localStorage.getItem("email");
+        const emailValue = localStorage.getItem("email");
         if (emailValue) {
             try {
                 setEmails(emailValue);
@@ -219,38 +214,65 @@ footer div {
             setEmails('');
         }
     }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (chat != "") {
+        if (chat !== "") {
+            setLoading(true)
             try {
                 console.log('start of try block')
-                setloading(true)
                 const updatedchat = [...chats, { type: "user", message: chat }];
                 setChats(updatedchat);
                 localStorage.setItem("chat", JSON.stringify(updatedchat));
                 const completion = await client.chat.completions.create({
-                    messages: [{ role: "user", content: chat }],
+                    messages: [
+                        { role: "system", content: "Generate email template in Json format" },
+                        { role: "user", content: chat },
+                        {
+                            role: "user", content: `Please provide  the output in following json format:
+                            {
+                            "HTML":"Your HTML code",
+                            "CSS":"Your CSS code",
+                            "Javascript":"Your Javascript code"
+                            }
+                            `},
+                    ],
                     model: "gpt-4o-mini",
-                    temperature: 0.5,
+                    temperature: 0.2,
+                    response_format: { type: "json_object" },
                 });
                 console.log(updatedchat)
-                const reply = completion.choices[0]?.message?.content || 'no Response'
+                const response = completion.choices[0].message.content;
+                setLoading(false)
                 console.log(reply)
-                const finalChats = [...updatedchat, { type: "assistant", message: reply }];
+                const parseResponse = JSON.parse(response)
+                console.log(parseResponse)
+
+                const formattedReply = `HTML:\n${parseResponse.HTML}\n\nCSS:\n${parseResponse.CSS}\n\nJavaScript:\n${parseResponse.Javascript}`;
+
+                const finalChats = [...updatedchat, { type: "assistant", message: formattedReply }];
+                setChats(finalChats)
+                setHTMLCode(parseResponse.HTML || '')
+                setCssCode(parseResponse.CSS || '')
+                setJsCode(parseResponse.Javascript || '')
                 localStorage.setItem("chat", JSON.stringify(finalChats));
                 console.log(finalChats)
-                setChats(finalChats)
                 setIframe(chat);
                 setChat("");
+                console.log(htmlCode)
+                console.log(cssCode)
+                console.log(jsCode)
+
             }
             catch (error) {
                 console.log('Error fetching completion', error);
+                setLoading(false)
             }
         }
     };
 
     useEffect(() => {
-        let chatValue = localStorage.getItem("chat");
+        const chatValue = localStorage.getItem("chat");
         if (chatValue) {
             try {
                 setChats(JSON.parse(chatValue));
@@ -264,11 +286,11 @@ footer div {
 
     return (
         <Box fontFamily="sans-serif" h="100vh" overflow="hidden">
-            <Box backgroundColor="brand.100" display={{ md: "block", lg: "none" }}>
+            <Box backgroundColor="brand.100" display={{ sm: "block", lg: "none" }}>
                 <IconButton
                     onClick={onOpen}
                     icon={<HamburgerIcon />}
-                    display={{ base: "block", lg: "none" }}
+                    display={{ sm: "block", lg: "none" }}
                     backgroundColor="brand.100"
                     zIndex="overlay"
                 />
@@ -279,7 +301,7 @@ footer div {
                         <DrawerCloseButton />
                         <DrawerBody backgroundColor="brand.100">
                             <VStack alignItems="flex-start" overflow="hidden">
-                                <Box as='div' >
+                                <Box as='div'>
                                     <Flex w="135px" h='100vh' backgroundColor="brand.100" >
                                         <Flex flexDir="column">
                                             <Flex>
@@ -302,8 +324,8 @@ footer div {
                     </DrawerContent>
                 </Drawer>
             </Box>
-            <Flex flexDir="row" borderColor={{ md: "brand.400", lg: "brand.400" }} borderWidth="2px">
-                <Box display={{ base: "none", lg: "block" }}>
+            <Flex flexDir="row" borderColor={{ sm: "brand.400", lg: "brand.400" }} borderWidth="2px">
+                <Box display={{ sm: "none", lg: "block" }}>
                     <Sidebar />
                 </Box>
                 <Divider
@@ -311,19 +333,20 @@ footer div {
                     h="100vh"
                     borderWidth="2px"
                     borderColor="brand.400"
-                    display={{ base: "none", lg: "block" }}
+                    display={{ sm: "none", lg: "block" }}
                 />
                 <Flex
                     flexDir="column"
-                    height={{ base: "93vh", lg: "99.5vh" }}
-                    w={{ md: "45%", lg: "45%" }}
+                    height={{ sm: "93vh", lg: "99.5vh" }}
+                    w={{ sm: "45%", lg: "45%" }}
                     bgColor="brand.100"
                     border="brand.500"
+                    flexGrow={{ sm: 1, lg: 1 }}
                 >
                     <Flex>
                         <Text
-                            mr={{ base: "4px", lg: "10px" }}
-                            ml={{ md: "2px", lg: "4px" }}
+                            mr={{ sm: "4px", lg: "10px" }}
+                            ml={{ sm: "2px", lg: "4px" }}
                             fontSize="20px"
                             mt="16px"
                             fontWeight="bold"
@@ -333,11 +356,11 @@ footer div {
                         </Text>
                         <Input
                             mt="10px"
-                            mr={{ base: "4px", lg: "8px" }}
+                            mr={{ sm: "4px", lg: "8px" }}
                             borderColor="brand.400"
                             value={email}
                             w={{
-                                md: "600px", lg: "685px"
+                                sm: "600px", lg: "685px"
                             }}
                             placeholder="Enter your email"
                             color="brand.400"
@@ -346,7 +369,7 @@ footer div {
                         <Button
                             bgColor="brand.200"
                             color="brand.500"
-                            mb={{ md: "7px", lg: "10px" }}
+                            mb={{ sm: "7px", lg: "10px" }}
                             mt="10px"
                             _hover={{ backgroundColor: "brand.200" }}
                             mr="2px"
@@ -357,56 +380,73 @@ footer div {
                         </Button>
                     </Flex>
                     <Divider borderWidth="2px" borderColor="brand.400" />
-                    <Flex flexDir="column">
-                        <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ md: "14px", lg: "20px" }} mt={{ md: "4px", lg: "6px" }} mb={{ md: "5px", lg: "4px" }} ml={{ md: "4px", lg: "6px" }} backgroundColor="brand.300" borderRadius="20px" padding="12px">
+                    <Flex flexDir="column" flex={{ sm: "1", lg: "1" }} overflow={{ sm: "auto", lg: "auto" }} maxHeight={{ sm: "calc(100vh - 160px)", lg: "calc(100vh - 170px)" }}>
+                        <Text fontWeight="bold" alignSelf="flex-start" fontSize={{ sm: "14px", lg: "20px" }} mt={{ sm: "4px", lg: "6px" }} mb={{ sm: "5px", lg: "4px" }} ml={{ sm: "4px", lg: "6px" }} backgroundColor="brand.300" borderRadius="20px" padding="12px">
                             Hello, how may I assist you?
                         </Text>
-                        {
-                            chats &&
-                            chats.map((chatMessage, index) => (
-                                <Flex key={index} sx={{ justifyContent: chatMessage.type === 'user' ? 'flex-end' : 'flex-start' }}>
-                                    <Flex flexDir="row" sx={{ backgroundColor: chatMessage.type === 'user' ? 'brand.200' : 'brand.300' }} mb="4px" ml="4px" mr="4px" width="fit-content" borderRadius="15px" padding="8px" justifyContent={{ base: "center", lg: "center" }} alignItems={{ base: "center", lg: "center" }} pt="7px" >
-                                        <Text color="brand.500" sx={{ color: chatMessage.type === 'user' ? 'brand.500' : 'brand.400' }} fontWeight="bold" mt={{ md: "8px", lg: "5px" }} fontSize="20px">
-                                            {chatMessage.message}
-                                        </Text>
-
-                                    </Flex>
+                        {chats?.map((chatMessage, index) => (
+                            <Flex key={index} sx={{ justifyContent: chatMessage.type === 'user' ? 'flex-end' : 'flex-start' }}>
+                                <Flex flexDir="column" sx={{ backgroundColor: chatMessage.type === 'user' ? 'brand.200' : 'brand.300' }} mb="4px" ml="4px" mr="8px" width="fit-content" borderRadius="15px" padding="8px" justifyContent={{ sm: "center", lg: "center" }} alignItems={{ sm: "center", lg: "center" }} pt="7px" >
+                                    <Text color="brand.500" sx={{ color: chatMessage.type === 'user' ? 'brand.500' : 'brand.400' }} fontWeight="bold" mt={{ sm: "8px", lg: "5px" }} fontSize="20px">
+                                        {chatMessage.type === 'assistant' ? (
+                                            <pre style={{ whiteSpace: 'pre-wrap', wordWrap: 'break-word' }}>
+                                                {chatMessage.message}
+                                            </pre>
+                                        ) : (
+                                            chatMessage.message
+                                        )}
+                                    </Text>
                                 </Flex>
-                            ))}
+                            </Flex>
+                        ))}
                     </Flex>
-                    <Flex mt={{ md: "auto", lg: "auto" }} height={{ base: "92vh", lg: "100vh" }}>
-                        <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end">
-                            <Input
-                                ml={{ md: "5px", lg: "7px" }}
-                                mr={{ md: "5px", lg: "8px" }}
-                                borderColor="brand.400"
-                                value={chat}
-                                w={{
-                                    md: '35vw',//768px
-                                    lg: "37vw",// ~992px
-                                    xl: "39vw",  // ~1280px
+                    {loading ? (
+                        <Spinner
+                            thickness="4px"
+                            speed="0.65s"
+                            emptyColor="brand.200"
+                            size="lg"
+                            position="center"
+                            mr="2px"
+                        />
+                    )
+                        : (
+                            <Flex mt={{ sm: "auto", lg: "auto" }} mb={{ sm: "1", lg: "2" }}>
+                                <Flex flexDir="row" justifyContent="flex-end" alignItems="flex-end" width="100%">
+                                    <Input
+                                        ml={{ sm: "5px", lg: "7px" }}
+                                        mr={{ sm: "5px", lg: "8px" }}
+                                        borderColor="brand.400"
+                                        value={chat}
+                                        w={{
+                                            sm: '36.5vw',
+                                            lg: "37vw",
+                                            xl: "39vw",
+                                        }}
+                                        placeholder="Type something to chat"
+                                        isDisabled={loading}
+                                        color="brand.400"
+                                        onChange={(e) => setChat(e.target.value)}
+                                    />
 
-                                }}
-                                placeholder="Type something to chat"
-                                color="brand.400"
-                                onChange={(e) => setChat(e.target.value)}
-                            />
-                            <Button
-                                color="brand.500"
-                                bgColor="brand.200"
-                                _hover={{ backgroundColor: "brand.200" }}
-                                mr="2px"
-                                w={{
-                                    md: "61px", // ~768px
-                                    lg: "62px",// ~992px
-                                    xl: "62px"//1280px
-                                }}
-                                onClick={handleSubmit}
-                            >
-                                Chat
-                            </Button>
-                        </Flex>
-                    </Flex>
+                                    <Button
+                                        color="brand.500"
+                                        bgColor="brand.200"
+                                        _hover={{ backgroundColor: "brand.200" }}
+                                        mr="2px"
+                                        w={{
+                                            sm: "61px",
+                                            lg: "62px",
+                                            xl: "62px"
+                                        }}
+                                        onClick={handleSubmit}
+                                    >
+                                        Chat
+                                    </Button>
+
+                                </Flex>
+                            </Flex>
+                        )}
                 </Flex>
                 <Divider
                     orientation="vertical"
@@ -416,53 +456,34 @@ footer div {
                 />
                 <Flex
                     flexDir="column"
-                    w={{ base: "55%", lg: "45%", xl: "55%" }}
+                    w={{ sm: "55%", lg: "45%", xl: "55%" }}
                     borderWidth="2px"
                     bgColor="brand.100"
                 >
-                    <Flex flexDir="column">
-                        <Flex flexDir="row" >
-                            <Box as="div" fontSize={{ md: "20px", lg: "30px" }}>{emails}
-                            </Box>
-                        </Flex>
-                        {eframe &&
-                            <>
-                                <Flex flexDir="row">
-                                    <Tabs>
-                                        <TabList>
-                                            <Tab color="brand.400" fontSize="30px" fontWeight="bold">Code</Tab>
-                                            <Tab color="brand.400" fontSize="30px" fontWeight="bold">Preview</Tab>
-                                        </TabList>
-                                        <TabPanels>
-                                            <TabPanel p={0}>
-                                                <Flex w={{ md: "53vw", lg: "40vw" }} h={{ md: "78vh", lg: "85vh" }}>
-                                                    <Code html={html} css={css} />
-                                                </Flex>
-                                            </TabPanel>
-                                            <TabPanel>
-                                                <Preview html={html} css={css} />
-                                            </TabPanel>
-                                        </TabPanels>
-                                    </Tabs>
-                                </Flex>
-
-                            </>
-                        }
-                    </Flex>
-                    {iframe && (
+                    {iframe &&
                         <>
-                            <Flex flexDir="column">
-                                <Heading color="brand.400">Output</Heading>
-                                <Box>
-                                    <iframe srcDoc={iframe} width="50%" height="200px"></iframe>
-                                </Box>
-
+                            <Flex flexDir="row">
+                                <Tabs>
+                                    <TabList>
+                                        <Tab color="brand.400" fontSize="30px" fontWeight="bold">Code</Tab>
+                                        <Tab color="brand.400" fontSize="30px" fontWeight="bold">Preview</Tab>
+                                    </TabList>
+                                    <TabPanels>
+                                        <TabPanel p={0}>
+                                            <Flex w={{ sm: "55vw", lg: "44vw" }} h={{ sm: "83.5vh", lg: "90vh" }}>
+                                                <Code html={htmlCode} css={cssCode} js={jsCode} />
+                                            </Flex>
+                                        </TabPanel>
+                                        <TabPanel>
+                                            <Preview html={htmlCode} css={cssCode} js={jsCode} />
+                                        </TabPanel>
+                                    </TabPanels>
+                                </Tabs>
                             </Flex>
                         </>
-                    )}
+                    }
                 </Flex>
-
             </Flex>
-        </Box >
+        </Box>
     );
 }
