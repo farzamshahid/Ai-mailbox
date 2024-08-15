@@ -7,7 +7,6 @@ import { useDisclosure } from '@chakra-ui/react'
 import { IoIosMail } from "react-icons/io";
 import { CiSettings } from "react-icons/ci";
 import { Spinner } from "@chakra-ui/react";
-import { Spinner } from "@chakra-ui/react";
 import { HamburgerIcon } from "@chakra-ui/icons";
 import OpenAI from "openai";
 import { useRouter } from "next/navigation";

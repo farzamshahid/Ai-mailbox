@@ -8,7 +8,8 @@
 
 # testing
 /coverage
-
+.env
+NEXT_PUBLIC_OPENAI_API_KEY
 # next.js
 /.next/
 /out/
